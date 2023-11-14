@@ -1,0 +1,147 @@
+{
+  "title": {
+    "Connect Bank": "Anslut Bank",
+    "Scan QR-code": "Skanna QR kod",
+    "Waiting for authentication": "Väntar på autentisering",
+    "Connecting bank": "Ansluter bank",
+    "Bank successfully connected!": "Banken har anslutits!",
+    "Select Account": "Välj konto",
+    "Select Positions": "Välj innehav",
+    "Receiving Account": "Mottagande konto",
+    "Summary": "Sammanfattning"
+  },
+  "stepper": {
+    "Connect Bank": "Anslut Bank",
+    "Select Account": "Välj konto",
+    "Confirm Transfer": "Bekräfta flytt"
+  },
+  "button": {
+    "Connect Bank": "Anslut Bank",
+    "Cancel": "Avbryt",
+    "Try again": "Försök igen",
+    "Next": "Nästa",
+    "Done": "Klar",
+    "Add Bank": "Lägg till bank",
+    "Select all": "Välj alla",
+    "Unselect all": "Avmarkera alla",
+    "Confirm Transfer": "Bekräfta flytt",
+    "Back to start": "Tillbaka till start",
+    "Restart": "Starta om"
+  },
+  "placeholder": {
+    "SSN": "YYYYMMDDXXXX",
+    "accountSelect": "-- Välj --"
+  },
+  "table": {
+    "name": {
+      "Investment Accounts": "Sparkonton",
+      "Bank Accounts": "Bankkonton",
+      "Loans": "Lån"
+    },
+    "Account": "Konto",
+    "Type": "Typ",
+    "Amount": "Belopp",
+    "Loan": "Lån",
+    "Interest %": "Ränta %",
+    "Total": "TOTAL",
+    "Position": "Innehav",
+    "Quantity": "Antal",
+    "Latest": "Senast",
+    "Return %": "Avkastning %",
+    "Share": "Andel",
+    "Date": "Datum",
+    "Price": "Pris",
+    "Message": "Meddelande"
+  },
+  "instrumentType": {
+    "STOCK": "Aktie",
+    "FUND": "Fond",
+    "ETF": "ETF",
+    "CERTIFICATE": "Certifikat",
+    "OTHER": "Övrigt"
+  },
+  "error": {
+    "Something went wrong.": "Något gick fel.",
+    "There is no session ID or account ID": "Det finns inget sessions-ID eller konto-ID",
+    "Bank init error": "Bankinitieringsfel",
+    "Bank id status pulling error": "Fel vid dragning av bank-id-status",
+    "Account positions fetch error": "Fel vid hämtning av kontopositioner",
+    "Providers fetch error": "Providers hämta fel",
+    "Receiving accounts fetch error": "Hämtningsfel för att ta emot konton",
+    "User accounts fetch error": "Fel vid hämtning av användarkonton",
+    "Select user account error": "Välj användarkonto fel",
+    "Accounts fetch error": "Fel vid hämtning av konton",
+    "An error has occurred": "Ett fel har uppstått",
+    "Account fetch error": "Kontohämtningsfel:",
+    "Performance fetch error": "Fel vid hämtning av prestanda:",
+    "Positions fetch error": "Positionshämtningsfel:",
+    "Transactions fetch error": "Transaktionshämtningsfel:",
+    "accounts fetch error": "kontohämtningsfel:",
+    "loans fetch error": "lån hämta fel:"
+  },
+  "Connect your bank accounts with BankID and find all account information.": "Koppla dina bankkonton med BankID och hitta all kontoinformation.",
+  "Same Device": "Samma enhet",
+  "Other Device": "Annan enhet",
+  "Type in you Social Security Number (Personnummer) below.": "Ange ditt Personnummer nedan.",
+  "Open BankID": "Öppna BankID",
+  "1. Open the BankID app in your mobile.": "1. Öppna BankID-appen i din mobil.",
+  "2. Click at the QR-code button.": "2. Klicka på QR-kodknappen.",
+  "3. Scan the QR-code below.": "3. Skanna QR-koden nedan.",
+  "You have more than one user accounts with this bank. Select which one that you would like to connect.": "Du har mer än ett användarkonto hos den här banken. Välj vilket du vill ansluta.",
+  "SuccessConnect": {
+    "account": "konto",
+    "was successfully connected": "har anslutits",
+    "accounts": "konton",
+    "were successfully connected": "har anslutits",
+    "from your bank!": "från din bank!"
+  },
+  "Choose which account you would like to transfer.": "Välj vilket konto du vill flytta.",
+  "Select which positions that you would like to transfer.": "Välj vilka innehav du vill flytta",
+  "Bank": "Bank:",
+  "Account": "Konto:",
+  "Select to which account you’d like to transfer your positions. You can only transfer to the same account type as you have your positions currently.": "Välj vilket konto du vill flytta dina innehav till. Du kan bara överföra till samma kontotyp som du har ditt innehav på för närvarande.",
+  "Your logo": "Din logotyp",
+  "Details": "Detaljer",
+  "Thank you": "Tack!",
+  "transactionType": {
+    "BUY": "Köp",
+    "SELL": "Sälj",
+    "DEPOSIT": "Insättning",
+    "WITHDRAWAL": "Uttag",
+    "DIVIDEND": "Utdelning",
+    "STOCK_LOAN": "Aktielån",
+    "WITHHOLDING_TAX": "Källskatt",
+    "FEE": "Avgift",
+    "INTEREST_AND_FEES": "Ränta och Avgift",
+    "TAX": "Skatt",
+    "OTHER": "Övrigt"
+  },
+  "tab": {
+    "Positions": "Innehav",
+    "Transactions": "Transaktioner"
+  },
+  "Financial Overview": "Finansiell översikt",
+  "You have not connected any bank. Click on the button below to connect.": "Du har inte anslutit något bank. Klicka på knappen nedan för att ansluta.",
+  "summary": {
+    "Cash": "Kontanter",
+    "Invested": "Investerade",
+    "Total": "Total"
+  },
+  "Your session expired. Press Restart to add bank.": "Din session har löpt ut. Tryck på Starta om för att lägga till bank.",
+  "Account Details": "Kontouppgifter",
+  "chart": {
+    "Performance": "Utveckling:",
+    "intervals": {
+      "TODAY": "1D",
+      "WEEK": "1V",
+      "MONTH": "1M",
+      "MONTH_3": "3M",
+      "MONTH_6": "6M",
+      "YTD": "NÅ",
+      "YEAR": "1Å",
+      "YEAR_3": "3Å",
+      "YEAR_5": "5Å",
+      "ALL": "ALLT"
+    }
+  }
+}

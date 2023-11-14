@@ -1,0 +1,147 @@
+{
+  "title": {
+    "Connect Bank": "Connect Bank",
+    "Scan QR-code": "Scan QR-code",
+    "Waiting for authentication": "Waiting for authentication",
+    "Connecting bank": "Connecting bank",
+    "Bank successfully connected!": "Bank successfully connected!",
+    "Select Account": "Select Account",
+    "Select Positions": "Select Positions",
+    "Receiving Account": "Receiving Account",
+    "Summary": "Summary"
+  },
+  "stepper": {
+    "Connect Bank": "Connect Bank",
+    "Select Account": "Select Account",
+    "Confirm Transfer": "Confirm Transfer"
+  },
+  "button": {
+    "Connect Bank": "Connect Bank",
+    "Cancel": "Cancel",
+    "Try again": "Try again",
+    "Next": "Next",
+    "Done": "Done",
+    "Add Bank": "Add Bank",
+    "Select all": "Select all",
+    "Unselect all": "Unselect all",
+    "Confirm Transfer": "Confirm Transfer",
+    "Back to start": "Back to start",
+    "Restart": "Restart"
+  },
+  "placeholder": {
+    "SSN": "YYYYMMDDXXXX",
+    "accountSelect": "-- Select --"
+  },
+  "table": {
+    "name": {
+      "Investment Accounts": "Investment Accounts",
+      "Bank Accounts": "Bank Accounts",
+      "Loans": "Loans"
+    },
+    "Account": "Account",
+    "Type": "Type",
+    "Amount": "Amount",
+    "Loan": "Loan",
+    "Interest %": "Interest %",
+    "Total": "TOTAL",
+    "Position": "Position",
+    "Quantity": "Quantity",
+    "Latest": "Latest",
+    "Return %": "Return %",
+    "Share": "Share",
+    "Date": "Date",
+    "Price": "Price",
+    "Message": "Message"
+  },
+  "instrumentType": {
+    "STOCK": "Stock",
+    "FUND": "Fund",
+    "ETF": "ETF",
+    "CERTIFICATE": "Certificate",
+    "OTHER": "Other"
+  },
+  "error": {
+    "Something went wrong.": "Something went wrong.",
+    "There is no session ID or account ID": "There is no session ID or account ID",
+    "Bank init error": "Bank init error",
+    "Bank id status pulling error": "Bank id status pulling error",
+    "Account positions fetch error": "Account positions fetch error",
+    "Providers fetch error": "Providers fetch error",
+    "Receiving accounts fetch error": "Receiving accounts fetch error",
+    "User accounts fetch error": "User accounts fetch error",
+    "Select user account error": "Select user account error",
+    "Accounts fetch error": "Accounts fetch error",
+    "An error has occurred": "An error has occurred",
+    "Account fetch error": "Account fetch error:",
+    "Performance fetch error": "Performance fetch error:",
+    "Positions fetch error": "Positions fetch error:",
+    "Transactions fetch error": "Transactions fetch error:",
+    "accounts fetch error": "accounts fetch error:",
+    "loans fetch error": "loans fetch error:"
+  },
+  "Connect your bank accounts with BankID and find all account information.": "Connect your bank accounts with BankID and find all account information.",
+  "Same Device": "Same Device",
+  "Other Device": "Other Device",
+  "Type in you Social Security Number (Personnummer) below.": "Type in you Social Security Number (Personnummer) below.",
+  "Open BankID": "Open BankID",
+  "1. Open the BankID app in your mobile.": "1. Open the BankID app in your mobile.",
+  "2. Click at the QR-code button.": "2. Click at the QR-code button.",
+  "3. Scan the QR-code below.": "3. Scan the QR-code below.",
+  "You have more than one user accounts with this bank. Select which one that you would like to connect.": "You have more than one user accounts with this bank. Select which one that you would like to connect.",
+  "SuccessConnect": {
+    "account": "account",
+    "was successfully connected": "was successfully connected",
+    "accounts": "accounts",
+    "were successfully connected": "were successfully connected",
+    "from your bank!": "from your bank!"
+  },
+  "Choose which account you would like to transfer.": "Choose which account you would like to transfer.",
+  "Select which positions that you would like to transfer.": "Select which positions that you would like to transfer.",
+  "Bank": "Bank:",
+  "Account": "Account:",
+  "Select to which account you’d like to transfer your positions. You can only transfer to the same account type as you have your positions currently.": "Select to which account you’d like to transfer your positions. You can only transfer to the same account type as you have your positions currently.",
+  "Your logo": "Your logo",
+  "Details": "Details",
+  "Thank you": "Thank you!",
+  "transactionType": {
+    "BUY": "Buy",
+    "SELL": "Sell",
+    "DEPOSIT": "Deposit",
+    "WITHDRAWAL": "Withdrawal",
+    "FEE": "Fee",
+    "DIVIDEND": "Dividend",
+    "INTEREST_AND_FEES": "Interest and Fees",
+    "STOCK_LOAN": "Stock Loan",
+    "WITHHOLDING_TAX": "With Holding Tax",
+    "TAX": "Tax",
+    "OTHER": "Other"
+  },
+  "tab": {
+    "Positions": "Positions",
+    "Transactions": "Transactions"
+  },
+  "Financial Overview": "Financial Overview",
+  "You have not connected any bank. Click on the button below to connect.": "You have not connected any bank. Click on the button below to connect.",
+  "summary": {
+    "Cash": "Cash",
+    "Invested": "Invested",
+    "Total": "Total"
+  },
+  "Your session expired. Press Restart to add bank.": "Your session expired. Press Restart to add bank.",
+  "Account Details": "Account Details",
+  "chart": {
+    "Performance": "Performance:",
+    "intervals": {
+      "TODAY": "1D",
+      "WEEK": "1W",
+      "MONTH": "1M",
+      "MONTH_3": "3M",
+      "MONTH_6": "6M",
+      "YTD": "CY",
+      "YEAR": "1Y",
+      "YEAR_3": "3Y",
+      "YEAR_5": "5Y",
+      "ALL": "ALL"
+    }
+  }
+}
