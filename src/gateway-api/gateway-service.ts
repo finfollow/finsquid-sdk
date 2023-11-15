@@ -366,3 +366,18 @@ const fetchProvidersLoanParts = async (
     throw err;
   }
 };
+
+export const keepAliveSessions = async (sids: string[]) => {
+  try {
+    const getKeepAlive = (sid: string): Promise<AccountsWithProviderT> =>
+      httpClient(`${url}/v1/login/alive`, {
+        headers: { sid },
+      }).then((res) => ({ ...res.data, sid }));
+    const res = await Promise.allSettled(sids?.map((sid) => getKeepAlive(sid)));
+    console.log("keep alive res: ", res);
+
+    return res;
+  } catch (err) {
+    throw err;
+  }
+};

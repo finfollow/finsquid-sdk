@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 
 type Props = {
   children?: ReactNode;
-  title?: string;
   currentStep?: StepsEnum;
   onBack?: () => void;
 };
@@ -19,15 +18,10 @@ export enum StepsEnum {
 
 const steps = ["Connect Bank", "Select Account", "Confirm Transfer"];
 
-export default function Wrapper({
-  children,
-  title,
-  currentStep,
-  onBack,
-}: Props) {
+export default function Wrapper({ children, currentStep, onBack }: Props) {
   const { t } = useTranslation();
   const { token } = theme.useToken();
-  const { lg, xs } = Grid.useBreakpoint();
+  const { xs } = Grid.useBreakpoint();
 
   return (
     <div

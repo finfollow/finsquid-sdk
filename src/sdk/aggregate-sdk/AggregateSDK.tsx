@@ -2,27 +2,24 @@ import { Button, Grid, Space, Tooltip, Typography, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/es/table";
 import {
+  PostMessageData,
   categorizeAccountsByType,
   currencyValue,
-  errorNotifier,
   formatTypeText,
-  // getAccountReturn,
-  // getColorByValue,
   getNameFromTwoValues,
   handleProvidersRejections,
-  investmentAccounts,
   percentValue,
+  sendPostMessage,
   tablesSort,
-  transformAccountType,
+  transformAccountSubType,
   transformLoanType,
 } from "../../utils/helpers";
-import {
-  SyncOutlined /* ExclamationCircleOutlined */,
-} from "@ant-design/icons";
+import { SyncOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { Currency, ProviderT } from "../../gateway-api/types";
+import { CategorizedAccounts, Currency } from "../../gateway-api/types";
 import { useConnectedProviders } from "../../utils/state-utils";
 import {
+  keepAliveSessions,
   useMultipleLoanParts,
   useMultipleProvidersAccounts,
 } from "../../gateway-api/gateway-service";
@@ -33,16 +30,6 @@ import {
 import { BankLogo, Layout, StyledTable } from "../../components";
 import { useTranslation } from "react-i18next";
 
-type CategorizedAccounts = {
-  category: string;
-  accounts: AccountWithProviderWithPctPerfT[];
-}[];
-
-type AggregatePostMessageData = {
-  type: "providers";
-  data?: ProviderT[];
-};
-
 export default function AggregateSDK() {
   const { t } = useTranslation();
   const { xs } = Grid.useBreakpoint();
@@ -50,10 +37,13 @@ export default function AggregateSDK() {
   const navigate = useNavigate();
   const [providers, setConnectedProviders] = useConnectedProviders();
   const [accounts, setAccounts] = useState<CategorizedAccounts>();
+  const redirectUrl = new URLSearchParams(document.location.search).get(
+    "redirect"
+  );
 
   useEffect(() => {
     const handlePostMessage = (event: any) => {
-      const { type, data }: AggregatePostMessageData =
+      const { type, data }: PostMessageData =
         typeof event.data === "string" ? JSON.parse(event.data) : event.data;
 
       if (type === "providers" && data?.length) {
@@ -68,18 +58,25 @@ export default function AggregateSDK() {
     };
   }, []);
 
+  useEffect(() => {
+    const sids = providers.map((provider) => provider.sid);
+    keepAliveSessions(sids);
+
+    const intervalId = setInterval(
+      () => keepAliveSessions(sids),
+      3 * 60 * 1000
+    );
+
+    return () => clearInterval(intervalId);
+  }, [providers]);
+
   const {
     data: rawAccounts,
     isFetching,
     refetch,
     error: errorAccounts,
   } = useMultipleProvidersAccounts(providers);
-  // const {
-  //   data: accountReturns,
-  //   isFetching: isFetchingReturns,
-  //   refetch: refetchReturns,
-  //   error: returnsError,
-  // } = useMultipleReturns(rawAccounts);
+
   const {
     data: loansData,
     isFetching: isFetchingLoans,
@@ -88,9 +85,8 @@ export default function AggregateSDK() {
   } = useMultipleLoanParts(providers);
 
   useEffect(() => {
-    /* if (accountReturns) setAccounts(categorizeAccountsByType(accountReturns));
-    else if (rawAccounts) */ setAccounts(categorizeAccountsByType(rawAccounts));
-  }, [rawAccounts /* accountReturns */]);
+    setAccounts(categorizeAccountsByType(rawAccounts));
+  }, [rawAccounts]);
 
   useEffect(() => {
     if (errorAccounts)
@@ -111,7 +107,7 @@ export default function AggregateSDK() {
   }, [errorLoans]);
 
   const getRoute = (acc: AccountWithProviderWithPctPerfT) => {
-    return acc.type && investmentAccounts.includes(acc.type)
+    return acc.type === "INVESTMENT"
       ? `investmentAccount/${acc.provider.sid}/${acc.providerAccountId}`
       : `account/${acc.provider.sid}/${acc.providerAccountId}`;
   };
@@ -156,7 +152,7 @@ export default function AggregateSDK() {
                 height: 40,
                 borderRadius: 20,
               }}
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate(`auth/?redirect=${redirectUrl}`)}
             >
               {t("button.Connect Bank")}
             </Button>
@@ -188,8 +184,9 @@ export default function AggregateSDK() {
                 borderWidth: 2,
               }}
               onClick={() => {
+                sendPostMessage({ type: "providers", data: [], error: null });
                 setConnectedProviders([]);
-                navigate("/auth");
+                navigate(`auth/?redirect=${redirectUrl}`);
               }}
             >
               {t("button.Restart")}
@@ -202,8 +199,6 @@ export default function AggregateSDK() {
           <>
             <div
               style={{
-                // display: "flex",
-                // justifyContent: "flex-end",
                 position: "absolute",
                 right: 0,
                 marginBottom: 10,
@@ -213,7 +208,7 @@ export default function AggregateSDK() {
               <Button
                 onClick={() => {
                   refetchLoans();
-                  refetch(); /* .then(refetchReturns) */
+                  refetch();
                 }}
               >
                 <SyncOutlined spin={isFetching} />
@@ -240,7 +235,7 @@ export default function AggregateSDK() {
                   value: currencyValue(totalValue, { fractionDigits: 0 }),
                 },
               ];
-              if (el.category === "Investment Accounts") {
+              if (el.category === "INVESTMENT") {
                 const totalBalance = el.accounts.reduce(
                   (total, acc) => {
                     total.amt += acc.balance?.amt || 0;
@@ -284,23 +279,11 @@ export default function AggregateSDK() {
                 />
               );
             })}
-            {/* <StyledTable
-            tableTitle={"Pension"}
-            loading={isFetching}
-            columns={pensionColumns}
-            dataSource={[]}
-            // rowKey={(acc) => acc.providerAccountId as string}
-            style={{ cursor: "pointer" }}
-            containerStyle={{ borderRadius: xs ? 0 : 10 }}
-            onRow={(account) => ({
-              onClick: () => navigate(getRoute(account)),
-            })}
-          /> */}
           </>
         )}
         {(isFetchingLoans || !!loansData?.length) && (
           <StyledTable
-            tableTitle={t("table.name.Loans")}
+            tableTitle={t("table.name.LOAN")}
             rowKey={"id"}
             loading={isFetchingLoans}
             columns={loanColumns(t)}
@@ -359,7 +342,7 @@ export default function AggregateSDK() {
               borderRadius: 20,
               width: 348,
             }}
-            onClick={() => navigate("/auth")}
+            onClick={() => navigate(`auth/?redirect=${redirectUrl}`)}
           >
             {t("button.Add Bank")}
           </Button>
@@ -373,8 +356,9 @@ export default function AggregateSDK() {
               width: 348,
             }}
             onClick={() => {
+              sendPostMessage({ type: "providers", data: [], error: null });
               setConnectedProviders([]);
-              navigate("/auth");
+              navigate(`auth/?redirect=${redirectUrl}`);
             }}
           >
             {t("button.Restart")}
@@ -429,60 +413,16 @@ const columns: (t: any) => ColumnsType<AccountWithProviderWithPctPerfT> = (
           justifyContent: "center",
         }}
       >
-        {transformAccountType(acc.type)}
+        {transformAccountSubType(acc.subType)}
       </div>
     ),
-    // width: "10%",
     sorter: (a, b) => tablesSort(a.type, b.type),
   },
-  // {
-  //   title: "Return %",
-  //   key: "returnMax",
-  //   align: "left",
-  //   render: (_, acc) =>
-  //     isFetchingReturns ? (
-  //       <SyncOutlined spin />
-  //     ) : acc.pctPerformance ? (
-  //       <div
-  //         style={{
-  //           color: getColorByValue(acc.pctPerformance.max),
-  //         }}
-  //       >
-  //         {(acc.pctPerformance.max || 0) > 0 && "+"}
-  //         {percentValue(acc.pctPerformance.max)}
-  //       </div>
-  //     ) : (
-  //       <ExclamationCircleOutlined style={{ color: "#E64C2C" }} />
-  //     ),
-  //   width: "10%",
-  //   sorter: (a, b) =>
-  //     tablesSort(
-  //       a?.pctPerformance ? a.pctPerformance.max : null,
-  //       b?.pctPerformance ? b.pctPerformance.max : null
-  //     ),
-  // },
-  // {
-  //   title: "Return",
-  //   key: "return",
-  //   align: "right",
-  //   render: (_, acc) =>
-  //     isFetchingReturns ? (
-  //       <SyncOutlined spin />
-  //     ) : acc.pctPerformance ? (
-  //       currencyValue(getAccountReturn(acc))
-  //     ) : (
-  //       <ExclamationCircleOutlined style={{ color: "#E64C2C" }} />
-  //     ),
-  //   width: "20%",
-  //   sorter: (a, b) =>
-  //     tablesSort(getAccountReturn(a)?.amt, getAccountReturn(b)?.amt),
-  // },
   {
     title: t("table.Amount"),
     dataIndex: "totalValue",
     align: "right",
     render: (m) => <b>{currencyValue(m)}</b>,
-    // width: "20%",
     sorter: (a, b) => tablesSort(a.totalValue?.amt, b.totalValue?.amt),
   },
 ];
@@ -543,63 +483,3 @@ const loanColumns: (t: any) => ColumnsType<LoanPartWithProviderT> = (t) => [
     sorter: (a, b) => tablesSort(a.balance?.amt, b.balance?.amt),
   },
 ];
-
-// const pensionColumns: ColumnsType<any> = [
-//   {
-//     render: (_, acc) => (
-//       <Image
-//         preview={false}
-//         style={{
-//           maxWidth: "2rem",
-//           maxHeight: "2rem",
-//           borderRadius: "50%",
-//           objectFit: "contain",
-//         }}
-//         src={acc.provider.logo}
-//       />
-//     ),
-//     width: "7%",
-//   },
-//   {
-//     title: "Loan",
-//     key: "name",
-//     render: (_, acc) =>
-//       getNameFromTwoValues(acc.name, acc.providerAccountNumber),
-//     width: "33%",
-//     sorter: (a, b) =>
-//       tablesSort(
-//         getNameFromTwoValues(a.name, a.providerAccountNumber),
-//         getNameFromTwoValues(b.name, b.providerAccountNumber)
-//       ),
-//   },
-//   {
-//     title: "Type",
-//     key: "type",
-//     render: (_, acc) => (
-//       <div
-//         style={{
-//           width: "2rem",
-//           height: "2rem",
-//           borderRadius: "50%",
-//           border: "1px solid #D9DBE2",
-//           fontSize: 10,
-//           display: "flex",
-//           alignItems: "center",
-//           justifyContent: "center",
-//         }}
-//       >
-//         {transformAccountType(acc.type)}
-//       </div>
-//     ),
-//     width: "10%",
-//     sorter: (a, b) => tablesSort(a.type, b.type),
-//   },
-//   {
-//     title: "Amount",
-//     dataIndex: "totalValue",
-//     align: "right",
-//     render: (m) => <b>{currencyValue(m)}</b>,
-//     width: "20%",
-//     sorter: (a, b) => tablesSort(a.totalValue?.amt, b.totalValue?.amt),
-//   },
-// ];

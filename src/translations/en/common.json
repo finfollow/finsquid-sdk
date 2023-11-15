@@ -34,9 +34,11 @@
   },
   "table": {
     "name": {
-      "Investment Accounts": "Investment Accounts",
-      "Bank Accounts": "Bank Accounts",
-      "Loans": "Loans"
+      "INVESTMENT": "Investment Accounts",
+      "BANKACCOUNT": "Bank Accounts",
+      "PENSION": "Pension",
+      "OTHER": "Other",
+      "LOAN": "Loans"
     },
     "Account": "Account",
     "Type": "Type",

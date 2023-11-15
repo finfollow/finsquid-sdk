@@ -104,7 +104,7 @@ export const dummyReceivingAccounts: AccountOverview[] = [
     providerAccountNumber: "56624924",
     name: "Test 1",
     owner: true,
-    type: "AF",
+    subType: "AF",
     provider: "Bank XYZ" as ProviderName,
     providerAccountCreated: "2010-09-30",
     balance: {
@@ -122,7 +122,7 @@ export const dummyReceivingAccounts: AccountOverview[] = [
     providerAccountNumber: "45121534",
     name: "Test 2",
     owner: true,
-    type: "ISK",
+    subType: "ISK",
     provider: "Bank XYZ" as ProviderName,
     providerAccountCreated: "2017-03-21",
     balance: {
@@ -140,7 +140,7 @@ export const dummyReceivingAccounts: AccountOverview[] = [
     providerAccountNumber: "2355121",
     name: "Test 3",
     owner: true,
-    type: "ISK",
+    subType: "ISK",
     provider: "Bank XYZ" as ProviderName,
     providerAccountCreated: "2017-05-01",
     balance: {
@@ -158,7 +158,7 @@ export const dummyReceivingAccounts: AccountOverview[] = [
     providerAccountNumber: "8237290",
     name: "Test 4",
     owner: true,
-    type: "KF",
+    subType: "KF",
     provider: "Bank XYZ" as ProviderName,
     providerAccountCreated: "2010-09-30",
     balance: {

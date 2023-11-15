@@ -5,6 +5,7 @@ import {
   ProviderConnectT,
   ProviderT,
 } from "../gateway-api/types";
+import { Dispatch, SetStateAction, useCallback } from "react";
 
 export interface SetGlobalState<T> {
   (state: T | ((prevState: T) => T)): void;
@@ -72,6 +73,36 @@ export const useConnectionSSN = () => {
   return useGlobalState<string>("connectionSSN", "");
 };
 
-export const useConnectedProviders = (initialState = []) => {
-  return useGlobalState<ProviderT[]>("connectedProviders", initialState);
+export const useConnectedProviders = () => {
+  return useLocalStorage<ProviderT[]>("connectedProviders", []);
+};
+
+const useLocalStorage = <T>(
+  key: string,
+  initialValue: T
+): [T, Dispatch<SetStateAction<T>>] => {
+  const readValue = useCallback((): T => {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? (JSON.parse(item) as T) : initialValue;
+    } catch (error) {
+      console.error(`Error reading localStorage key "${key}":`, error);
+      return initialValue;
+    }
+  }, [key, initialValue]);
+
+  const setValue: Dispatch<SetStateAction<T>> = useCallback(
+    (value) => {
+      try {
+        const valueToStore =
+          value instanceof Function ? value(readValue()) : value;
+        localStorage.setItem(key, JSON.stringify(valueToStore));
+      } catch (error) {
+        console.error(`Error writing localStorage key "${key}":`, error);
+      }
+    },
+    [key, readValue]
+  );
+
+  return [readValue(), setValue];
 };

@@ -8,11 +8,11 @@ import Personnummer from "personnummer";
 import { useTranslation } from "react-i18next";
 import CardContentWrapper from "./CardContentWrapper";
 import CardTitle from "./CardTitle";
-import { StateUpdater } from "preact/hooks";
 import { StepT, steps } from "../utils/constants";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
-  setNextStep: StateUpdater<StepT>;
+  setNextStep: Dispatch<SetStateAction<StepT>>;
 };
 
 export default function ConnectViaSSN({ setNextStep }: Props) {

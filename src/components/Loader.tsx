@@ -1,13 +1,13 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Image, theme } from "antd";
 
-export default function Loader({
-  size = 65,
-  color,
-}: {
+type Props = {
   size?: number;
   color?: string;
-}) {
+  background?: string;
+};
+
+export default function Loader({ size = 65, color, background }: Props) {
   const { token } = theme.useToken();
   return (
     // @TODO here comes the finsquid loader after it will be done
@@ -19,6 +19,8 @@ export default function Loader({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        background,
+        borderRadius: size / 2,
       }}
     >
       <Image

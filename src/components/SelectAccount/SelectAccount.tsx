@@ -1,14 +1,14 @@
 import { Button, Grid, Space, Typography } from "antd";
 import { ColumnsType } from "antd/es/table";
 import StyledTable from "../StyledTable";
-import { AccountOverview, AccountType } from "../../gateway-api/types";
+import { AccountOverview, AccountSubType } from "../../gateway-api/types";
 import { useAccounts } from "../../gateway-api/gateway-service";
 import {
   currencyValue,
   getNameFromTwoValues,
   sendPostMessage,
   tablesSort,
-  transformAccountType,
+  transformAccountSubType,
 } from "../../utils/helpers";
 import {
   useTransferingAccount,
@@ -33,7 +33,7 @@ export default function SelectAccount({ onSubmit, radioBtns }: Props) {
   const [provider] = useTransferingProvider();
   const [transferingAccount, setTransferingAccount] = useTransferingAccount();
   const { isFetching, data, error } = useAccounts(provider?.sid);
-  const isTransferableAccount = (type?: AccountType) =>
+  const isTransferableAccount = (type?: AccountSubType) =>
     ["ISK", "AF"].includes(type || "");
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function SelectAccount({ onSubmit, radioBtns }: Props) {
             justifyContent: "center",
           }}
         >
-          {transformAccountType(acc.type)}
+          {transformAccountSubType(acc.subType)}
         </div>
       ),
       sorter: (a, b) => tablesSort(a.type, b.type),
@@ -120,7 +120,7 @@ export default function SelectAccount({ onSubmit, radioBtns }: Props) {
             containerStyle={{ marginTop: 20, borderRadius: xs ? 0 : 10 }}
             onRow={(acc) => ({
               onClick: () => {
-                if (isTransferableAccount(acc.type)) {
+                if (isTransferableAccount(acc.subType)) {
                   if (radioBtns)
                     setTransferingAccount((prev) =>
                       prev?.providerAccountId === acc.providerAccountId
@@ -135,7 +135,7 @@ export default function SelectAccount({ onSubmit, radioBtns }: Props) {
               },
             })}
             rowClassName={(acc) =>
-              !radioBtns && !isTransferableAccount(acc.type)
+              !radioBtns && !isTransferableAccount(acc.subType)
                 ? "disabled-row"
                 : ""
             }

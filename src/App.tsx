@@ -12,8 +12,15 @@ import svSE from "antd/locale/sv_SE";
 import enUS from "antd/locale/en_US";
 import BankAccountDetails from "./sdk/aggregate-sdk/components/BankAccountDetails";
 import InvestmentAccountDetails from "./sdk/aggregate-sdk/components/InvestmentAccountDetails";
+import AggregateAuth from "./sdk/aggregate-sdk/components/AggregateAuth";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+});
 
 function App() {
   const { i18n } = useTranslation();
@@ -72,7 +79,16 @@ function App() {
               />
               <Route
                 path="auth"
-                element={<AuthSDK radioBtns={radioBtns === "true"} />}
+                element={
+                  <AggregateAuth
+                    apiToken={searchParams.get("api_key")}
+                    apiUrl={
+                      searchParams.get("api_url") ||
+                      import.meta.env.VITE_GATEWAY_URL
+                    }
+                    theme={themeParams && encodeURIComponent(themeParams)}
+                  />
+                }
               />
             </Route>
           </Routes>

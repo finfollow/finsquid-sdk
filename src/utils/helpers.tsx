@@ -2,7 +2,6 @@ import { notification } from "antd";
 import { ArgsProps } from "antd/es/notification/interface";
 import {
   Account,
-  AccountType,
   AccountWithProviderT,
   CategorizedAccounts,
   InstrumentType,
@@ -14,7 +13,6 @@ import {
 } from "../gateway-api/types";
 import i18n from "../translations/i18n";
 import { t } from "i18next";
-// import i18n from "i18n";
 
 export const currencyValue = (
   m: Money | null | undefined,
@@ -88,14 +86,12 @@ export function isDateInRange(
   return dateToCheck >= startDate && dateToCheck <= endDate;
 }
 
-export const transformAccountType = (
-  type: Account["type"] | null | undefined
+export const transformAccountSubType = (
+  type: Account["subType"] | null | undefined
 ) => {
   switch (type) {
-    case "SPAR_PLUS":
-      return "SP";
-    case "INVESTMENT":
-      return "INV";
+    case "CHECKING":
+      return "CHK";
     case "SAVINGS":
       return "SV";
     case "OTHER":
@@ -143,33 +139,18 @@ export const transformLoanType = (type: LoanType): string => {
   }
 };
 
-export const investmentAccounts: AccountType[] = [
-  "KF",
-  "AF",
-  "ISK",
-  "TJP",
-  "INVESTMENT",
-];
-
-const getCategory = (
-  type: AccountType | undefined
-): "Investment Accounts" | "Bank Accounts" =>
-  type && investmentAccounts.includes(type)
-    ? "Investment Accounts"
-    : "Bank Accounts";
-
 export const categorizeAccountsByType: (
   accounts?: AccountWithProviderT[]
 ) => CategorizedAccounts = (accounts?: AccountWithProviderT[]) =>
   accounts
-    ?.map((el) => getCategory(el.type))
+    ?.map((el) => el.type)
     .filter((el, i, array) => array.indexOf(el) === i)
     .map((category) => ({
       category,
-      accounts: accounts.filter((el) => getCategory(el.type) === category),
+      accounts: accounts.filter((el) => el.type === category),
     })) ?? [
-    { category: "Investment Accounts", accounts: [] },
-    { category: "Bank Accounts", accounts: [] },
+    { category: "INVESTMENT", accounts: [] },
+    { category: "BANKACCOUNT", accounts: [] },
   ];
 
 export const categorizePositionsByType = (positions?: Position[]) =>
@@ -181,8 +162,8 @@ export const categorizePositionsByType = (positions?: Position[]) =>
       positions: positions.filter((el) => el.instrument.type === type),
     }));
 
-type PostMessageData = {
-  type: "success" | "error";
+export type PostMessageData = {
+  type: "providers" | "success" | "error";
   data?: any;
   error?: { type?: string; message?: any } | null;
 };
@@ -192,7 +173,7 @@ export const sendPostMessage = (message: PostMessageData) => {
   const targetOrigin = searchParams.get("redirect");
 
   if (targetOrigin) {
-    window.parent.postMessage(JSON.stringify(message), targetOrigin);
+    window.parent.postMessage(message, targetOrigin);
   }
 };
 

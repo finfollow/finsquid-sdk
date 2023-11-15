@@ -1,9 +1,5 @@
 import { useAccounts } from "../gateway-api/gateway-service";
-import {
-  useConnectedProviders,
-  useLoginProvider,
-  useTransferingProvider,
-} from "../utils/state-utils";
+import { useLoginProvider, useTransferingProvider } from "../utils/state-utils";
 import { Button, Space, Typography, theme } from "antd";
 import { useEffect } from "react";
 import Loader from "./Loader";
@@ -23,12 +19,11 @@ export default function SuccessConnect({ onSubmit, onBack }: Props) {
   const { token } = theme.useToken();
   const searchParams = new URLSearchParams(document.location.search);
   const [provider, setProvider] = useLoginProvider();
-  const [_cp, setConnectedProviders] = useConnectedProviders();
   const [_tp, setTransferingProvider] = useTransferingProvider();
   const { isFetching, data, error } = useAccounts(provider?.sid);
   const accountsNumber = data?.accounts.length || 0;
   const isPluralAccounts = accountsNumber > 1;
-  console.log("data.accounts: ", data?.accounts);
+
   useEffect(() => {
     // @TODO handle the case if there are no any accounts
     if (onSubmit && data?.accounts.length) {
@@ -36,8 +31,6 @@ export default function SuccessConnect({ onSubmit, onBack }: Props) {
       setTransferingProvider(provider as ProviderT);
     }
     if (!onSubmit && data?.accounts.length) {
-      console.log("provider: ", provider);
-      setConnectedProviders((prev) => [...prev, provider as ProviderT]);
       sendPostMessage({ type: "success", data: provider, error: null });
     }
   }, [data?.accounts]);

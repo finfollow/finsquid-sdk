@@ -34,9 +34,11 @@
   },
   "table": {
     "name": {
-      "Investment Accounts": "Sparkonton",
-      "Bank Accounts": "Bankkonton",
-      "Loans": "Lån"
+      "INVESTMENT": "Sparkonton",
+      "BANKACCOUNT": "Bankkonton",
+      "PENSION": "Pension",
+      "OTHER": "Övrig",
+      "LOAN": "Lån"
     },
     "Account": "Konto",
     "Type": "Typ",
