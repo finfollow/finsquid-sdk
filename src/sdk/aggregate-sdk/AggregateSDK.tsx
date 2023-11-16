@@ -268,7 +268,7 @@ export default function AggregateSDK() {
             })}
           </>
         )}
-        {(isFetchingLoans || !!loansData?.length) && (
+        {!!loansData?.length && (
           <StyledTable
             tableTitle={t("table.name.LOAN")}
             rowKey={"id"}
