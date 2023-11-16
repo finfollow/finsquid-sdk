@@ -19,7 +19,6 @@ import { useEffect, useState } from "react";
 import { CategorizedAccounts, Currency } from "../../gateway-api/types";
 import { useConnectedProviders } from "../../utils/state-utils";
 import {
-  keepAliveSessions,
   useMultipleLoanParts,
   useMultipleProvidersAccounts,
 } from "../../gateway-api/gateway-service";
@@ -57,18 +56,6 @@ export default function AggregateSDK() {
       window.removeEventListener("message", handlePostMessage);
     };
   }, []);
-
-  useEffect(() => {
-    const sids = providers.map((provider) => provider.sid);
-    keepAliveSessions(sids);
-
-    const intervalId = setInterval(
-      () => keepAliveSessions(sids),
-      3 * 60 * 1000
-    );
-
-    return () => clearInterval(intervalId);
-  }, [providers]);
 
   const {
     data: rawAccounts,
