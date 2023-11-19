@@ -20,13 +20,16 @@ export default function AggregateAuth({
 }) {
   const { i18n } = useTranslation();
   const [iframeLoaded, setIframeLoaded] = useState(false);
-  const [providers, setConnectedProviders] = useConnectedProviders();
+  const [_p, setConnectedProviders] = useConnectedProviders();
   const { protocol, host } = window.location;
   const baseUrl = `${protocol}//${host}`;
-  const redirectUrl = `${baseUrl}/aggregate/?api_key=${apiToken}&theme=${theme}&lang=${i18n.resolvedLanguage}&api_url=${apiUrl}`;
+  const parentRedirectUrl = new URLSearchParams(document.location.search).get(
+    "redirect"
+  );
+  const redirectBackToAggregate = `${baseUrl}/aggregate/?api_key=${apiToken}&theme=${theme}&lang=${i18n.resolvedLanguage}&api_url=${apiUrl}&redirect=${parentRedirectUrl}`;
   const authSdkLink = `${baseUrl}/auth/?api_key=${apiToken}&theme=${theme}&lang=${
     i18n.resolvedLanguage
-  }&api_url=${apiUrl}&redirect=${encodeURIComponent(redirectUrl)}`;
+  }&api_url=${apiUrl}&redirect=${encodeURIComponent(redirectBackToAggregate)}`;
 
   useEffect(() => {
     const handlePostMessage = (event: any) => {
@@ -34,11 +37,14 @@ export default function AggregateAuth({
       const { type, data, error }: PostMessageData = event.data;
 
       if (type === "success") {
-        setConnectedProviders((prev) => [...prev, data as ProviderT]);
-        sendPostMessage({
-          type: "providers",
-          data: [...providers, data],
-          error: null,
+        setConnectedProviders((prev) => {
+          const connectedProviders = [...prev, data as ProviderT];
+          sendPostMessage({
+            type: "providers",
+            data: connectedProviders,
+            error: null,
+          });
+          return connectedProviders;
         });
       } else if (type === "error") {
         errorNotifier({

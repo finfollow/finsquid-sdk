@@ -172,7 +172,7 @@ export const sendPostMessage = (message: PostMessageData) => {
   const searchParams = new URLSearchParams(document.location.search);
   const targetOrigin = searchParams.get("redirect");
 
-  if (targetOrigin) {
+  if (targetOrigin && targetOrigin !== "null") {
     window.parent.postMessage(message, targetOrigin);
   }
 };
