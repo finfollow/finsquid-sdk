@@ -48,7 +48,12 @@ export default function CustomSummary({
                 textAlign: "center",
               }}
             >
-              <LoadingOutlined style={{ fontSize: 20, color: "#fff" }} />
+              <LoadingOutlined
+                style={{
+                  fontSize: 20,
+                  color: token.Button?.primaryColor || "#fff",
+                }}
+              />
             </div>
           )}
           <div
@@ -57,13 +62,21 @@ export default function CustomSummary({
             }}
           >
             <div>
-              <Typography.Text style={{ color: "#fff", opacity: 0.7 }}>
+              <Typography.Text
+                style={{
+                  color: token.Button?.primaryColor || "#fff",
+                  opacity: 0.7,
+                }}
+              >
                 {el.title}
               </Typography.Text>
             </div>
             <div>
               <Typography.Text
-                style={{ fontSize: xs ? 14 : 18, color: "#fff" }}
+                style={{
+                  fontSize: xs ? 14 : 18,
+                  color: token.Button?.primaryColor || "#fff",
+                }}
               >
                 <b>{el.value}</b>
               </Typography.Text>

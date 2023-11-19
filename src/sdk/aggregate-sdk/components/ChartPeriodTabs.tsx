@@ -63,7 +63,9 @@ export default function ChartPeriodTabs({
                     fontWeight: "600",
                     color: "gray",
                     lineHeight: "18px",
-                    ...(isActive ? { color: token.colorWhite } : {}),
+                    ...(isActive
+                      ? { color: token.Button?.primaryColor || "#fff" }
+                      : {}),
                   }}
                 >
                   {t(`chart.intervals.${tab}`)}
@@ -72,7 +74,7 @@ export default function ChartPeriodTabs({
                   <Typography.Text
                     style={{
                       color: isActive
-                        ? token.colorWhite
+                        ? token.Button?.primaryColor || "#fff"
                         : (Number(pctPerformance[periodToPctPerfMap[tab]]) ||
                             0) < 0
                         ? token.red
