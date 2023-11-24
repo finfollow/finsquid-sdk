@@ -26,8 +26,9 @@ export default function AggregateAuth({
   const parentRedirectUrl = new URLSearchParams(document.location.search).get(
     "redirect"
   );
-  const redirectBackToAggregate = `${baseUrl}/aggregate/?api_key=${apiToken}&theme=${theme}&lang=${i18n.resolvedLanguage}&api_url=${apiUrl}&redirect=${parentRedirectUrl}`;
-  const authSdkLink = `${baseUrl}/auth/?api_key=${apiToken}&theme=${theme}&lang=${
+  const api_key = encodeURIComponent(apiToken || "null");
+  const redirectBackToAggregate = `${baseUrl}/aggregate/?api_key=${api_key}&theme=${theme}&lang=${i18n.resolvedLanguage}&api_url=${apiUrl}&redirect=${parentRedirectUrl}`;
+  const authSdkLink = `${baseUrl}/auth/?api_key=${api_key}&theme=${theme}&lang=${
     i18n.resolvedLanguage
   }&api_url=${apiUrl}&redirect=${encodeURIComponent(redirectBackToAggregate)}`;
 

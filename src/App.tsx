@@ -30,9 +30,9 @@ function App() {
     themeParams && JSON.parse(decodeURIComponent(themeParams));
   const radioBtns = searchParams.get("radio-buttons");
   const lang = searchParams.get("lang");
-
+  const apiToken = decodeURIComponent(searchParams.get("api_key") || "null");
   httpClient.defaults.headers.common = {
-    Authorization: `Bearer ${searchParams.get("api_key")}`,
+    Authorization: `Bearer ${apiToken}`,
   };
 
   useEffect(() => {
@@ -81,7 +81,7 @@ function App() {
                 path="auth"
                 element={
                   <AggregateAuth
-                    apiToken={searchParams.get("api_key")}
+                    apiToken={apiToken}
                     apiUrl={
                       searchParams.get("api_url") ||
                       import.meta.env.VITE_GATEWAY_URL
