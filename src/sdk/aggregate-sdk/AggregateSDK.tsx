@@ -45,9 +45,8 @@ export default function AggregateSDK() {
       const { type, data }: PostMessageData =
         typeof event.data === "string" ? JSON.parse(event.data) : event.data;
 
-      if (type === "providers" && data?.length) {
-        console.log("aggregate event: ", event);
-        setConnectedProviders(data);
+      if (type === "providers") {
+        setConnectedProviders(data?.length ? data : []);
         console.log("RESULT: ", data);
       }
     };
