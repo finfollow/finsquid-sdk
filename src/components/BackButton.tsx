@@ -26,7 +26,7 @@ export default function BackButton({ size = 18, ...props }: Props) {
       type="text"
       {...props}
     >
-      <LeftOutlined style={{ fontSize: size }} />
+      {!props.loading && <LeftOutlined style={{ fontSize: size }} />}
     </Button>
   );
 }

@@ -11,6 +11,9 @@ import {
   Wrapper,
 } from "../../components";
 import { StepT, steps } from "../../utils/constants";
+import { useLoginProvider } from "../../utils/state-utils";
+import { bankIdInitCancel } from "../../gateway-api/gateway-service";
+import { ProviderConnectT } from "../../gateway-api/types";
 
 type Props = {
   radioBtns?: boolean;
@@ -18,6 +21,7 @@ type Props = {
 
 export default function AuthSDK({ radioBtns }: Props) {
   const [step, setStep] = useState<StepT>(steps.selectProvider);
+  const [provider, setProvider] = useLoginProvider();
 
   const nextStep: Dispatch<SetStateAction<StepT>> = (_step) => {
     window.scrollTo(0, 0);
@@ -28,7 +32,21 @@ export default function AuthSDK({ radioBtns }: Props) {
     <Wrapper
       onBack={
         step.prevStep
-          ? () => step.prevStep && nextStep(steps[step.prevStep])
+          ? (step.value === "scanQRcode" ||
+              step.value === "openBankID" ||
+              step.value === "waitingConnection") &&
+            provider?.sid
+            ? () =>
+                bankIdInitCancel(provider.sid).then((res) => {
+                  if (res?.status === "complete") {
+                    step.prevStep && nextStep(steps[step.prevStep]);
+                    setProvider((prev) => ({
+                      ...(prev as ProviderConnectT),
+                      sid: null,
+                    }));
+                  }
+                })
+            : () => step.prevStep && nextStep(steps[step.prevStep])
           : undefined
       }
     >

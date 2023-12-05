@@ -1,6 +1,10 @@
 import { Button, QRCode, QRCodeProps, Typography, theme } from "antd";
 import { useEffect, useState } from "react";
-import { bankIdInit, pollBankIdStatus } from "../gateway-api/gateway-service";
+import {
+  bankIdInit,
+  bankIdInitCancel,
+  pollBankIdStatus,
+} from "../gateway-api/gateway-service";
 import { useQuery } from "@tanstack/react-query";
 import {
   useConnectionSSN,
@@ -34,6 +38,8 @@ export default function ScanQrCode({
   const [provider, setProvider] = useLoginProvider();
   const [isWithSNNConnection] = useIsLoginWithSSN();
   const [isSameDevice] = useLoginIsSameDevice();
+  const [isLoadingCancel, setIsLoadingCancel] = useState(false);
+
   //@TODO handle this case
   if (!provider) return null;
 
@@ -52,6 +58,7 @@ export default function ScanQrCode({
       );
 
       if (res.imageChallengeData && res.sid) {
+        setProvider({ ...provider, sid: res.sid });
         setSid(res.sid);
         setQrCode(res.imageChallengeData);
         setQrStatus("active");
@@ -108,6 +115,18 @@ export default function ScanQrCode({
     bankIdStatusPulling.data?.status,
   ]);
 
+  const onCancelHandler = async () => {
+    try {
+      setIsLoadingCancel(true);
+      const res = await bankIdInitCancel(sid);
+      if (res?.status === "complete") onCancel();
+    } catch (err) {
+      console.log("bank init cancel error: ", err);
+    } finally {
+      setIsLoadingCancel(false);
+    }
+  };
+
   return (
     <CardContentWrapper>
       <CardTitle text="Scan QR-code" />
@@ -143,7 +162,8 @@ export default function ScanQrCode({
       <Button
         block
         style={{ borderColor: token.colorPrimary }}
-        onClick={onCancel}
+        onClick={onCancelHandler}
+        loading={isLoadingCancel}
       >
         {t("button.Cancel")}
       </Button>

@@ -77,6 +77,16 @@ export async function bankIdInit(
   }
 }
 
+export async function bankIdInitCancel(
+  sid?: string | null
+): Promise<{ status: "failed" | "complete" } | undefined> {
+  if (!sid) return;
+  const res = await httpClient(`${url}/v1/login/bankid/cancel`, {
+    headers: { sid },
+  });
+  return res.data;
+}
+
 export async function pollBankIdStatus(
   sid: string,
   sameDevice: boolean,
@@ -94,11 +104,7 @@ export async function pollBankIdStatus(
     );
     console.log("BankID status", res.data.status);
 
-    return {
-      status: res.data.status,
-      raw: res.data.raw,
-      imageChallengeData: res.data.imageChallengeData,
-    };
+    return res.data;
   } catch (error: any) {
     console.error("BankID status failed", error);
     throw error?.response?.data ?? error;

@@ -3,10 +3,14 @@ import { Button, Image, Typography, theme } from "antd";
 import CardContentWrapper from "./CardContentWrapper";
 import CardTitle from "./CardTitle";
 import Loader from "./Loader";
-import { pollBankIdStatus } from "../gateway-api/gateway-service";
+import {
+  bankIdInitCancel,
+  pollBankIdStatus,
+} from "../gateway-api/gateway-service";
 import { useTranslation } from "react-i18next";
 import { sendPostMessage } from "../utils/helpers";
 import { useLoginProvider } from "../utils/state-utils";
+import { useState } from "react";
 
 type Props = {
   onSuccess: () => void;
@@ -22,6 +26,7 @@ export default function WaitingConnection({
   const { t } = useTranslation();
   const { token } = theme.useToken();
   const [provider] = useLoginProvider();
+  const [isLoadingCancel, setIsLoadingCancel] = useState(false);
   //@TODO handle this case
   if (!provider) return null;
 
@@ -45,6 +50,18 @@ export default function WaitingConnection({
     },
     enabled: !!provider?.sid,
   });
+
+  const onCancelHandler = async () => {
+    try {
+      setIsLoadingCancel(true);
+      const res = await bankIdInitCancel(provider?.sid);
+      if (res?.status === "complete") onCancel();
+    } catch (err) {
+      console.log("bank init cancel error: ", err);
+    } finally {
+      setIsLoadingCancel(false);
+    }
+  };
 
   // @TODO handle all status accordingly
   if (
@@ -86,7 +103,8 @@ export default function WaitingConnection({
       <Button
         block
         style={{ borderColor: token.colorPrimary, marginTop: 30 }}
-        onClick={onCancel}
+        onClick={onCancelHandler}
+        loading={isLoadingCancel}
       >
         {t("button.Cancel")}
       </Button>
