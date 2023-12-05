@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Grid } from "antd";
 import { Position } from "../../../gateway-api/types";
 import { useTranslation } from "react-i18next";
-import { useAccountPositions } from "../../../gateway-api/gateway-service";
+import { useAccount } from "../../../gateway-api/gateway-service";
 import {
   currencyValue,
   errorNotifier,
@@ -26,16 +26,16 @@ export default function PositionsTab({ sid, accountId }: Props) {
   const { xs } = Grid.useBreakpoint();
   const [positions, setPositions] = useState<PositionWithShare[] | undefined>();
   const [pageSize, setpageSize] = useState(50);
-  const { data, isFetching, error } = useAccountPositions(sid, accountId);
+  const { data, isFetching, error } = useAccount(sid, accountId);
 
   useEffect(() => {
     if (data) {
-      const totalAmount = data.reduce(
+      const totalAmount = data.positions.reduce(
         (sum, pos) => sum + (pos.marketValueAC?.amt || 0),
         0
       );
       setPositions(
-        data?.map((pos) => ({
+        data.positions?.map((pos) => ({
           ...pos,
           share: (pos.marketValueAC?.amt || 0) / totalAmount,
         }))
