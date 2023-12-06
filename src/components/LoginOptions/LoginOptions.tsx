@@ -1,11 +1,11 @@
-import { Space, Typography } from "antd";
+import { Button, Space, Typography } from "antd";
 import BankLogo from "../BankLogo";
 import { useLoginProvider } from "../../utils/state-utils";
 import BankIdOption from "./components/BankIdOption";
 import { useTranslation } from "react-i18next";
 import CardTitle from "../CardTitle";
 import CardContentWrapper from "../CardContentWrapper";
-import { StepT } from "../../utils/constants";
+import { StepT, steps } from "../../utils/constants";
 
 type Props = {
   setNextStep: (step: StepT) => void;
@@ -63,6 +63,17 @@ export default function LoginOptions({ setNextStep }: Props) {
                 );
               }
               return null;
+            case "usernamePassword":
+              return (
+                <Button
+                  key={option.loginMethod}
+                  type="primary"
+                  block
+                  onClick={() => setNextStep(steps.username)}
+                >
+                  {t("Username")}
+                </Button>
+              );
             default:
               return null;
           }

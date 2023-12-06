@@ -35,7 +35,7 @@ export default function ConnectViaSSN({ setNextStep }: Props) {
       <div>
         <div style={{ width: 232, marginTop: 20 }}>
           <Typography.Text>
-            {t("Type in you Social Security Number (Personnummer) below.")}
+            {t("Type in your Social Security Number (Personnummer) below.")}
           </Typography.Text>
         </div>
         <div style={{ margin: "40px 0" }}>

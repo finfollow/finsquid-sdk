@@ -15,6 +15,7 @@ import { useLoginProvider } from "../../utils/state-utils";
 import { bankIdInitCancel } from "../../gateway-api/gateway-service";
 import { ProviderConnectT } from "../../gateway-api/types";
 import "./styles.css";
+import ConnectViaUsername from "../../components/ConnectViaUsername";
 
 type Props = {
   radioBtns?: boolean;
@@ -59,6 +60,11 @@ export default function AuthSDK({ radioBtns }: Props) {
       )}
       {step.value === "loginOptions" && (
         <LoginOptions setNextStep={(step) => nextStep(step)} />
+      )}
+      {step.value === "username" && (
+        <ConnectViaUsername
+          onSuccess={() => nextStep(steps.selectUserAccount)}
+        />
       )}
       {step.value === "provideSSN" && <ConnectViaSSN setNextStep={nextStep} />}
       {step.value === "openBankID" && (

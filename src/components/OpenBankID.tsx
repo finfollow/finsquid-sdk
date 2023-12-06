@@ -1,7 +1,7 @@
 import { Button, Image, theme } from "antd";
 import CardContentWrapper from "./CardContentWrapper";
 import CardTitle from "./CardTitle";
-import { bankIdInit } from "../gateway-api/gateway-service";
+import { bankInitLogin } from "../gateway-api/gateway-service";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { sendPostMessage } from "../utils/helpers";
@@ -38,20 +38,24 @@ export default function OpenBankId({ onSuccess }: Props) {
     if (!provider.name) return;
     try {
       setIsLoading(true);
-      const res = await bankIdInit(
-        provider.name,
-        isWithSNNConnection ? ssn : undefined,
-        isSameDevice
-      );
+      const res = await bankInitLogin({
+        providerId: provider.id,
+        loginOption: isWithSNNConnection
+          ? {
+              loginMethod: "bankidSSN",
+              params: { userId: ssn, sameDevice: isSameDevice },
+            }
+          : { loginMethod: "bankid", params: { sameDevice: isSameDevice } },
+      });
 
-      if (res.autostartToken && res.sid) {
+      if (res?.autostartToken && res?.sid) {
         setProvider({ ...provider, sid: res.sid });
         setAutostartToken(res.autostartToken);
-      } else if (res.status === "conflict") {
+      } else if (res?.status === "conflict") {
         setShowRetryBtn(true);
       } else throw "There is no start token or session id";
     } catch (error) {
-      console.error("bankIdInit error:", error);
+      console.error("bank init login error:", error);
       sendPostMessage({
         type: "error",
         error: { type: t("error.Bank init error"), message: error },

@@ -1,8 +1,8 @@
 import { Button, QRCode, QRCodeProps, Typography, theme } from "antd";
 import { useEffect, useState } from "react";
 import {
-  bankIdInit,
   bankIdInitCancel,
+  bankInitLogin,
   pollBankIdStatus,
 } from "../gateway-api/gateway-service";
 import { useQuery } from "@tanstack/react-query";
@@ -51,25 +51,29 @@ export default function ScanQrCode({
     if (!provider.name) return;
     setQrStatus("loading");
     try {
-      const res = await bankIdInit(
-        provider.name,
-        isWithSNNConnection ? ssn : undefined,
-        isSameDevice
-      );
+      const res = await bankInitLogin({
+        providerId: provider.id,
+        loginOption: isWithSNNConnection
+          ? {
+              loginMethod: "bankidSSN",
+              params: { userId: ssn, sameDevice: isSameDevice },
+            }
+          : { loginMethod: "bankid", params: { sameDevice: isSameDevice } },
+      });
 
-      if (res.imageChallengeData && res.sid) {
+      if (res?.imageChallengeData && res?.sid) {
         setProvider({ ...provider, sid: res.sid });
         setSid(res.sid);
         setQrCode(res.imageChallengeData);
         setQrStatus("active");
         if (bankIdStatusPulling.isFetchedAfterMount)
           bankIdStatusPulling.refetch();
-      } else if (!res.imageChallengeData && res.sid && isWithSNNConnection) {
+      } else if (!res?.imageChallengeData && res?.sid && isWithSNNConnection) {
         setProvider({ ...provider, sid: res.sid });
         setNextStep(steps.waitingConnection);
       } else throw "There is no qr code data or session id";
     } catch (error) {
-      console.error("bankIdInit error:", error);
+      console.error("bank init login error:", error);
       sendPostMessage({
         type: "error",
         error: { type: t("error.Bank init error"), message: error },

@@ -56,19 +56,31 @@ export type LoginParam = {
   optional?: boolean;
 };
 
-export type BankIdInitQueryParams = {
-  includeRawData: boolean;
-  sameDevice: boolean;
-  userId?: string;
+export type BankLoginBody = {
+  providerId: number;
+  loginOption: {
+    loginMethod: "bankid" | "bankidSSN" | "usernamePassword";
+    params:
+      | {
+          username: string;
+          password: string;
+        }
+      | {
+          userId: string;
+          sameDevice: boolean;
+        }
+      | { sameDevice: boolean };
+  };
 };
 
-export type BankIdRes = {
-  autostartToken: string;
-  imageChallengeData?: string;
-  sid: string;
-  success: boolean;
-  status: SessionStatus;
-};
+export type BankLoginRes =
+  | {
+      status: "failed" | "conflict" | "complete";
+      sid?: string;
+      autostartToken?: string;
+      imageChallengeData?: string;
+    }
+  | undefined;
 
 export type BankIdStatus = {
   imageChallengeData?: string;

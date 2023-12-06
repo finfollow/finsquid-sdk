@@ -3,6 +3,7 @@ import { AccountOverview, ProviderName } from "../gateway-api/types";
 export type StepsT = Record<
   | "selectProvider"
   | "loginOptions"
+  | "username"
   | "provideSSN"
   | "openBankID"
   | "scanQRcode"
@@ -42,6 +43,11 @@ export const steps: StepsT = {
   },
   provideSSN: {
     value: "provideSSN",
+    wrapperStep: StepsEnum["ConnectBank"],
+    prevStep: "loginOptions",
+  },
+  username: {
+    value: "username",
     wrapperStep: StepsEnum["ConnectBank"],
     prevStep: "loginOptions",
   },

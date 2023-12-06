@@ -3,9 +3,9 @@ import {
   AccountDetails,
   AccountsOverview,
   AccountsWithProviderT,
-  BankIdInitQueryParams,
-  BankIdRes,
   BankIdStatus,
+  BankLoginBody,
+  BankLoginRes,
   LoanPartWithProviderT,
   LoanWithProviderT,
   LoginStatus,
@@ -44,37 +44,12 @@ export function useProviders() {
   });
 }
 
-export async function bankIdInit(
-  provider: string,
-  ssn?: string,
-  sameDevice = true,
-  includeRawData = false
-): Promise<Partial<BankIdRes>> {
-  try {
-    const data: BankIdInitQueryParams = {
-      includeRawData: includeRawData,
-      sameDevice: sameDevice,
-    };
-    if (ssn) data.userId = ssn;
-
-    const res = await httpClient.post(
-      `${url}/v1/login/${provider}/bankid/init
-      `,
-      data
-    );
-
-    const sid = res.headers["sid"];
-
-    return {
-      autostartToken: res.data.autostartToken,
-      imageChallengeData: res.data.imageChallengeData,
-      sid: sid,
-      success: true,
-    };
-  } catch (error: any) {
-    console.log("BankID init failed with error: ", error);
-    throw error?.response?.data ?? error;
-  }
+export async function bankInitLogin(
+  params: BankLoginBody
+): Promise<BankLoginRes> {
+  const res = await httpClient.post(`${url}/v1/login/init`, params);
+  const sid = res.headers["sid"];
+  return { ...res.data, sid };
 }
 
 export async function bankIdInitCancel(
