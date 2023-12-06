@@ -14,6 +14,7 @@ import { StepT, steps } from "../../utils/constants";
 import { useLoginProvider } from "../../utils/state-utils";
 import { bankIdInitCancel } from "../../gateway-api/gateway-service";
 import { ProviderConnectT } from "../../gateway-api/types";
+import "./styles.css";
 
 type Props = {
   radioBtns?: boolean;
