@@ -93,7 +93,7 @@ export default function AggregateSDK() {
   }, [errorLoans]);
 
   const getRoute = (acc: AccountWithProviderWithPctPerfT) => {
-    return acc.type === "INVESTMENT"
+    return acc.type === "INVESTMENT" || acc.type === "PENSION"
       ? `investmentAccount/${acc.provider.sid}/${acc.providerAccountId}`
       : `account/${acc.provider.sid}/${acc.providerAccountId}`;
   };
