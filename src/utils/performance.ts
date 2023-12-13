@@ -137,12 +137,13 @@ export const getFullPerformance = ({
   type: "MONETARY" | "PERCENTAGE";
 }) => {
   const periods = getPerformancePeriods(data[0]?.date);
-  let _data =
-    period === "ALL"
+  let _data = Array.isArray(data)
+    ? period === "ALL"
       ? data
-      : data.filter(
+      : data?.filter(
           (item) => item && isDateInPeriod(item?.date, periods[period])
-        );
+        )
+    : [];
 
   let result: { date: string; value: number }[] = [];
   const tickIndex =
