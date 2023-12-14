@@ -10,9 +10,15 @@ import {
 export default function RefreshBtn() {
   const { sid, accountId } = useParams();
   if (!sid || !accountId) return null;
-  const account = useAccount(sid, accountId, true);
-  const transactions = useAccountTransactions(sid, accountId, true);
-  const performance = usePerformance(sid, accountId, true);
+  const account = useAccount(sid, accountId, true, {
+    enabled: false,
+  });
+  const transactions = useAccountTransactions(sid, accountId, true, {
+    enabled: false,
+  });
+  const performance = usePerformance(sid, accountId, true, {
+    enabled: false,
+  });
 
   return (
     <Button

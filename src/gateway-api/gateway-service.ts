@@ -16,7 +16,7 @@ import {
   Transaction,
   UserAccount,
 } from "./types";
-import { useQuery } from "@tanstack/react-query";
+import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { dummyReceivingAccounts } from "../utils/constants";
 import { handleProvidersRejections } from "../utils/helpers";
 
@@ -125,11 +125,12 @@ export async function selectUserAccount(
 export function useAccount(
   sid: string,
   accountId: string,
-  includeRawData = false
+  includeRawData = false,
+  options: UseQueryOptions = {}
 ) {
-  return useQuery<AccountDetails>({
-    queryKey: ["accounts", sid, accountId],
-    queryFn: () =>
+  return useQuery<AccountDetails>(
+    ["accounts", sid, accountId],
+    () =>
       httpClient(
         `${url}/v1/accounts/${accountId}?includeRawData=${includeRawData}`,
         { headers: { sid } }
@@ -138,7 +139,9 @@ export function useAccount(
         .catch((err) => {
           throw err?.response?.data || err;
         }),
-  });
+    //@ts-ignore
+    options
+  );
 }
 
 export function useAccounts(sid?: string | null, includeRawData = false) {
@@ -159,11 +162,12 @@ export function useAccounts(sid?: string | null, includeRawData = false) {
 export function usePerformance(
   sid: string,
   accountId: string,
-  includeRawData = false
+  includeRawData = false,
+  options: UseQueryOptions = {}
 ) {
-  return useQuery<PerfTick[]>({
-    queryKey: ["performance", sid, accountId],
-    queryFn: () =>
+  return useQuery<PerfTick[]>(
+    ["performance", sid, accountId],
+    () =>
       httpClient(
         `${url}/v1/accounts/${accountId}/performance?includeRawData=${includeRawData}`,
         { headers: { sid } }
@@ -172,7 +176,9 @@ export function usePerformance(
         .catch((err) => {
           throw err?.response?.data || err;
         }),
-  });
+    //@ts-ignore
+    options
+  );
 }
 
 export function useAccountPositions(
@@ -197,7 +203,8 @@ export function useAccountPositions(
 export function useAccountTransactions(
   sid: string,
   accountId: string,
-  includeRawData = false
+  includeRawData = false,
+  options: UseQueryOptions = {}
 ) {
   return useQuery<Transaction[]>(
     ["accounts", sid, accountId, "transactions"],
@@ -209,7 +216,9 @@ export function useAccountTransactions(
         .then((res) => res.data)
         .catch((err) => {
           throw err?.response?.data || err;
-        })
+        }),
+    //@ts-ignore
+    options
   );
 }
 
