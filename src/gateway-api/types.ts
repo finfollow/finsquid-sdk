@@ -75,7 +75,7 @@ export type BankLoginBody = {
 
 export type BankLoginRes =
   | {
-      status: "failed" | "conflict" | "complete";
+      status: "pending" | "failed" | "conflict" | "complete";
       sid?: string;
       autostartToken?: string;
       imageChallengeData?: string;

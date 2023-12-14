@@ -61,7 +61,7 @@ export default function ScanQrCode({
           : { loginMethod: "bankid", params: { sameDevice: isSameDevice } },
       });
 
-      if (res?.imageChallengeData && res?.sid) {
+      if (res?.status === "pending" && res?.imageChallengeData && res?.sid) {
         setProvider({ ...provider, sid: res.sid });
         setSid(res.sid);
         setQrCode(res.imageChallengeData);

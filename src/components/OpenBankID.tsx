@@ -48,7 +48,7 @@ export default function OpenBankId({ onSuccess }: Props) {
           : { loginMethod: "bankid", params: { sameDevice: isSameDevice } },
       });
 
-      if (res?.autostartToken && res?.sid) {
+      if (res?.status === "pending" && res?.autostartToken && res?.sid) {
         setProvider({ ...provider, sid: res.sid });
         setAutostartToken(res.autostartToken);
       } else if (res?.status === "conflict") {

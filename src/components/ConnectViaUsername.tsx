@@ -34,7 +34,7 @@ export default function ConnectViaUsername({ onSuccess }: Props) {
         loginOption: { loginMethod: "usernamePassword", params: values },
       });
       console.log("bankLogin res: ", res);
-      if (res?.sid) {
+      if (res?.status === "complete" && res?.sid) {
         setProvider((prev) => ({
           ...(prev as ProviderConnectT),
           sid: res.sid,
