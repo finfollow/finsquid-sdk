@@ -21,7 +21,7 @@ import TabsContent from "./TabsContent";
 import RefreshBtn from "./RefreshBtn";
 
 const chartPeriods: Array<keyof typeof PerfTimePeriod> = [
-  "TODAY",
+  // "TODAY",
   "WEEK",
   "MONTH",
   "MONTH_3",
