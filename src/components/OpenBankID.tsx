@@ -79,9 +79,7 @@ export default function OpenBankId({ onSuccess }: Props) {
           block
           onClick={() => {
             window.open(
-              isAndroid
-                ? `bankid:///?autostarttoken=${autostartToken}&redirect=null`
-                : `https://app.bankid.com/?autostarttoken=${autostartToken}&redirect=null`
+              `bankid:///?autostarttoken=${autostartToken}&redirect=null`
             );
             onSuccess();
           }}
