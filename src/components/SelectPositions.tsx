@@ -40,7 +40,8 @@ export default function SelectPositions({ onSubmit }: Props) {
     );
   const { isFetching, data, error } = useAccountPositions(
     provider?.sid,
-    transferingAccount?.providerAccountId
+    transferingAccount?.providerAccountId,
+    true
   );
   const tableData = useMemo(() => categorizePositionsByType(data), [data]);
 

@@ -61,14 +61,14 @@ export default function AggregateSDK() {
     isFetching,
     refetch,
     error: errorAccounts,
-  } = useMultipleProvidersAccounts(providers);
+  } = useMultipleProvidersAccounts(providers, true);
 
   const {
     data: loansData,
     isFetching: isFetchingLoans,
     refetch: refetchLoans,
     error: errorLoans,
-  } = useMultipleLoanParts(providers);
+  } = useMultipleLoanParts(providers, true);
 
   useEffect(() => {
     setAccounts(categorizeAccountsByType(rawAccounts));

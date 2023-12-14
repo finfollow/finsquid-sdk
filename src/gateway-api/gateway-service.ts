@@ -197,11 +197,10 @@ export function useAccountPositions(
 export function useAccountTransactions(
   sid: string,
   accountId: string,
-  accountType = "",
   includeRawData = false
 ) {
   return useQuery<Transaction[]>(
-    ["accounts", sid, accountId, "transactions", accountType],
+    ["accounts", sid, accountId, "transactions"],
     () =>
       httpClient(
         `${url}/v1/accounts/${accountId}/transactions?includeRawData=${includeRawData}`,

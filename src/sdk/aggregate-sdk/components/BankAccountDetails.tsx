@@ -37,13 +37,13 @@ export default function BankAccountDetails() {
   ]);
   const [pageSize, setpageSize] = useState(50);
   const [providers] = useConnectedProviders();
-  const { data, isLoading, error } = useAccount(sid, accountId);
+  const { data, isLoading, error } = useAccount(sid, accountId, true);
   const {
     data: transactionData,
     isFetching,
     refetch,
     error: transactionError,
-  } = useAccountTransactions(sid, accountId);
+  } = useAccountTransactions(sid, accountId, true);
   const logoSrc = providers.find(
     (el) => el.name === data?.account.provider
   )?.iconUrl;

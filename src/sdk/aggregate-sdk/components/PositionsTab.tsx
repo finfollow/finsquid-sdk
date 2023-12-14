@@ -26,7 +26,7 @@ export default function PositionsTab({ sid, accountId }: Props) {
   const { xs } = Grid.useBreakpoint();
   const [positions, setPositions] = useState<PositionWithShare[] | undefined>();
   const [pageSize, setpageSize] = useState(50);
-  const { data, isFetching, error } = useAccount(sid, accountId);
+  const { data, isFetching, error } = useAccount(sid, accountId, true);
 
   useEffect(() => {
     if (data) {

@@ -34,7 +34,7 @@ export default function TransactionsTab({ sid, accountId }: Props) {
     isFetching,
     refetch,
     error,
-  } = useAccountTransactions(sid, accountId);
+  } = useAccountTransactions(sid, accountId, true);
 
   useEffect(() => {
     setTransactions(

@@ -33,7 +33,7 @@ export default function SelectUserAccount({ onSuccess }: Props) {
     if (!provider?.sid) return;
     try {
       setIsLoading(true);
-      const _useraccounts = await getUserAccounts(provider.sid);
+      const _useraccounts = await getUserAccounts(provider.sid, true);
       console.log("useraccounts: ", _useraccounts);
       if (_useraccounts.length > 1) setUseraccounts(_useraccounts);
       if (_useraccounts.length === 1)
@@ -55,7 +55,7 @@ export default function SelectUserAccount({ onSuccess }: Props) {
     if (!provider?.sid) return;
     setIsSelectLoading(true);
     try {
-      const res = await selectUserAccount(provider?.sid, accountId);
+      const res = await selectUserAccount(provider?.sid, accountId, true);
       console.log("selectAccount res: ", res);
       if (res.status === "complete") onSuccess();
     } catch (error) {

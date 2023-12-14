@@ -32,7 +32,7 @@ export default function SelectAccount({ onSubmit, radioBtns }: Props) {
   const { xs } = Grid.useBreakpoint();
   const [provider] = useTransferingProvider();
   const [transferingAccount, setTransferingAccount] = useTransferingAccount();
-  const { isFetching, data, error } = useAccounts(provider?.sid);
+  const { isFetching, data, error } = useAccounts(provider?.sid, true);
   const isTransferableAccount = (type?: AccountSubType) =>
     ["ISK", "AF"].includes(type || "");
 

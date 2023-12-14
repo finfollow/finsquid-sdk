@@ -20,7 +20,7 @@ export default function SuccessConnect({ onSubmit, onBack }: Props) {
   const searchParams = new URLSearchParams(document.location.search);
   const [provider, setProvider] = useLoginProvider();
   const [_tp, setTransferingProvider] = useTransferingProvider();
-  const { isFetching, data, error } = useAccounts(provider?.sid);
+  const { isFetching, data, error } = useAccounts(provider?.sid, true);
   const accountsNumber = data?.accounts.length || 0;
   const isPluralAccounts = accountsNumber > 1;
 

@@ -39,9 +39,9 @@ export default function InvestmentAccountDetails() {
   const [chartPeriod, setChartPeriod] =
     useState<keyof typeof PerfTimePeriod>("ALL");
   const [providers] = useConnectedProviders();
-  const account = useAccount(sid, accountId);
+  const account = useAccount(sid, accountId, true);
   // @TODO refactor refresh button, transactions fetch twice here and after user comes to transaction tab because of this hook here
-  const performance = usePerformance(sid, accountId);
+  const performance = usePerformance(sid, accountId, true);
   const performanceData = useMemo(
     () =>
       getFullPerformance({
