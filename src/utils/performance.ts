@@ -16,7 +16,7 @@ export function diffOfCurrentYearDays() {
 export const getPerformancePeriods = (firstDate?: string): TimePeriods => {
   const currentDate = new Date();
   return {
-    TODAY: moment(currentDate).format("YYYY-MM-DD"),
+    // TODAY: moment(currentDate).format("YYYY-MM-DD"),
     WEEK: moment(currentDate).subtract(8, "days").format("YYYY-MM-DD"),
     MONTH: moment(currentDate)
       .subtract(1, "days")
@@ -101,7 +101,7 @@ export const periodsLabels = {
 };
 
 export enum PerfTimePeriod {
-  TODAY = "TODAY",
+  // TODAY = "TODAY",
   WEEK = "WEEK",
   MONTH = "MONTH",
   MONTH_3 = "MONTH_3",
@@ -116,7 +116,7 @@ export const periodToPctPerfMap: Record<
   keyof typeof PerfTimePeriod,
   keyof PercentagePerformance
 > = {
-  TODAY: "today",
+  // TODAY: "today",
   WEEK: "l1Week",
   MONTH: "l1Month",
   MONTH_3: "l3Month",
@@ -171,10 +171,12 @@ export const getFullPerformance = ({
                 ((point && point[tickIndex]) || 0) || 0;
       else {
         tick =
-          ((((point && point[tickIndex]) || 0) + 1) *
-            ((result[index - 1]?.value || 0) / 100 + 1) -
-            1) *
-          100;
+          index === 0
+            ? 0
+            : ((((point && point[tickIndex]) || 0) + 1) *
+                ((result[index - 1]?.value || 0) / 100 + 1) -
+                1) *
+              100;
       }
     }
     result.push({

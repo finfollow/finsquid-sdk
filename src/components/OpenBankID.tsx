@@ -66,8 +66,6 @@ export default function OpenBankId({ onSuccess }: Props) {
     }
   };
 
-  const isAndroid = /Android/i.test(navigator.userAgent);
-
   return (
     <CardContentWrapper>
       <CardTitle text="Connect Bank" />
