@@ -43,9 +43,10 @@ export default function OpenBankId({ onSuccess }: Props) {
         loginOption: isWithSNNConnection
           ? {
               loginMethod: "bankidSSN",
-              params: { userId: ssn, sameDevice: isSameDevice },
+              userId: ssn,
+              sameDevice: isSameDevice,
             }
-          : { loginMethod: "bankid", params: { sameDevice: isSameDevice } },
+          : { loginMethod: "bankid", sameDevice: isSameDevice },
       });
 
       if (res?.status === "pending" && res?.autostartToken && res?.sid) {

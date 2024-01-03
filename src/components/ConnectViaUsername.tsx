@@ -31,7 +31,7 @@ export default function ConnectViaUsername({ onSuccess }: Props) {
       setisLoading(true);
       const res = await bankInitLogin({
         providerId: provider.id,
-        loginOption: { loginMethod: "usernamePassword", params: values },
+        loginOption: { loginMethod: "usernamePassword", ...values },
       });
       console.log("bankLogin res: ", res);
       if (res?.status === "complete" && res?.sid) {

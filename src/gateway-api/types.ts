@@ -58,19 +58,21 @@ export type LoginParam = {
 
 export type BankLoginBody = {
   providerId: number;
-  loginOption: {
-    loginMethod: "bankid" | "bankidSSN" | "usernamePassword";
-    params:
-      | {
-          username: string;
-          password: string;
-        }
-      | {
-          userId: string;
-          sameDevice: boolean;
-        }
-      | { sameDevice: boolean };
-  };
+  loginOption:
+    | {
+        loginMethod: "usernamePassword";
+        username: string;
+        password: string;
+      }
+    | {
+        loginMethod: "bankidSSN";
+        userId: string;
+        sameDevice?: boolean;
+      }
+    | {
+        loginMethod: "bankid";
+        sameDevice?: boolean;
+      };
 };
 
 export type BankLoginRes =
