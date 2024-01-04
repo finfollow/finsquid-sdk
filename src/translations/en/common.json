@@ -66,7 +66,7 @@
     "Something went wrong.": "Something went wrong.",
     "There is no session ID or account ID": "There is no session ID or account ID",
     "Bank init error": "Bank init error",
-    "Bank id status pulling error": "Bank id status pulling error",
+    "BankID status pulling error": "BankID status pulling error",
     "Account positions fetch error": "Account positions fetch error",
     "Providers fetch error": "Providers fetch error",
     "Receiving accounts fetch error": "Receiving accounts fetch error",

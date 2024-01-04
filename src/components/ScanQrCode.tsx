@@ -99,7 +99,7 @@ export default function ScanQrCode({
       sendPostMessage({
         type: "error",
         error: {
-          type: t("error.Bank id status pulling error"),
+          type: t("error.BankID status pulling error"),
           message: error,
         },
       });

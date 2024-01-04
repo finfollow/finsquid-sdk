@@ -66,7 +66,7 @@
     "Something went wrong.": "Något gick fel.",
     "There is no session ID or account ID": "Det finns inget sessions-ID eller konto-ID",
     "Bank init error": "Bankinitieringsfel",
-    "Bank id status pulling error": "Fel vid dragning av bank-id-status",
+    "BankID status pulling error": "BankID-statusdragningsfel",
     "Account positions fetch error": "Fel vid hämtning av kontopositioner",
     "Providers fetch error": "Providers hämta fel",
     "Receiving accounts fetch error": "Hämtningsfel för att ta emot konton",
