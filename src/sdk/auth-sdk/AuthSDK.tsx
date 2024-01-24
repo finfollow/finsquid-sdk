@@ -16,6 +16,7 @@ import { bankIdInitCancel } from "../../gateway-api/gateway-service";
 import { ProviderConnectT } from "../../gateway-api/types";
 import "./styles.css";
 import ConnectViaUsername from "../../components/ConnectViaUsername";
+import ConnectViaMitID from "../../components/ConnectViaMitID";
 
 type Props = {
   radioBtns?: boolean;
@@ -64,6 +65,12 @@ export default function AuthSDK({ radioBtns }: Props) {
       {step.value === "username" && (
         <ConnectViaUsername
           onSuccess={() => nextStep(steps.selectUserAccount)}
+        />
+      )}
+      {step.value === "mitid" && (
+        <ConnectViaMitID
+          onSuccess={() => nextStep(steps.selectAccount)}
+          onCancel={() => step.prevStep && nextStep(steps[step.prevStep])}
         />
       )}
       {step.value === "provideSSN" && <ConnectViaSSN setNextStep={nextStep} />}

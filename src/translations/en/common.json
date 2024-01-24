@@ -26,7 +26,8 @@
     "Unselect all": "Unselect all",
     "Confirm Transfer": "Confirm Transfer",
     "Back to start": "Back to start",
-    "Restart": "Restart"
+    "Restart": "Restart",
+    "Continue": "Continue"
   },
   "placeholder": {
     "SSN": "YYYYMMDDXXXX",
@@ -81,6 +82,10 @@
     "accounts fetch error": "accounts fetch error:",
     "loans fetch error": "loans fetch error:"
   },
+  "Log on at MitID": "Log on at MitID",
+  "User ID": "User ID",
+  "Open MitID app and approve": "Open MitID app and approve",
+  "Scan QR code using MitID app": "Scan QR code using MitID app",
   "Connect your bank accounts with BankID and find all account information.": "Connect your bank accounts with BankID and find all account information.",
   "Same Device": "Same Device",
   "Other Device": "Other Device",

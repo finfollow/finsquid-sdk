@@ -74,6 +74,17 @@ export default function LoginOptions({ setNextStep }: Props) {
                   {t("Username")}
                 </Button>
               );
+            case "mitid":
+              return (
+                <Button
+                  key={option.loginMethod}
+                  type="primary"
+                  block
+                  onClick={() => setNextStep(steps.mitid)}
+                >
+                  {t("MitID")}
+                </Button>
+              );
             default:
               return null;
           }

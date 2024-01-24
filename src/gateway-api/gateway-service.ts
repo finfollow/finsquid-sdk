@@ -56,7 +56,7 @@ export async function bankIdInitCancel(
   sid?: string | null
 ): Promise<{ status: "failed" | "complete" } | undefined> {
   if (!sid) return;
-  const res = await httpClient(`${url}/v1/login/bankid/cancel`, {
+  const res = await httpClient(`${url}/v1/login/cancel`, {
     headers: { sid },
   });
   return res.data;
@@ -74,7 +74,7 @@ export async function pollBankIdStatus(
       includeRawData,
     });
     const res = await httpClient(
-      `${url}/v1/login/bankid/status?includeRawData=${includeRawData}&sameDevice=${sameDevice}`,
+      `${url}/v1/login/status?includeRawData=${includeRawData}&sameDevice=${sameDevice}`,
       { headers: { sid } }
     );
     console.log("BankID status", res.data.status);

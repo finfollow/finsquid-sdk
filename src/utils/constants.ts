@@ -5,6 +5,7 @@ export type StepsT = Record<
   | "loginOptions"
   | "username"
   | "provideSSN"
+  | "mitid"
   | "openBankID"
   | "scanQRcode"
   | "waitingConnection"
@@ -53,6 +54,11 @@ export const steps: StepsT = {
   },
   scanQRcode: {
     value: "scanQRcode",
+    wrapperStep: StepsEnum["ConnectBank"],
+    prevStep: "loginOptions",
+  },
+  mitid: {
+    value: "mitid",
     wrapperStep: StepsEnum["ConnectBank"],
     prevStep: "loginOptions",
   },

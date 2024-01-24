@@ -26,7 +26,8 @@
     "Unselect all": "Avmarkera alla",
     "Confirm Transfer": "Bekräfta flytt",
     "Back to start": "Tillbaka till start",
-    "Restart": "Starta om"
+    "Restart": "Starta om",
+    "Continue": "Fortsätta"
   },
   "placeholder": {
     "SSN": "YYYYMMDDXXXX",
@@ -81,6 +82,10 @@
     "accounts fetch error": "kontohämtningsfel:",
     "loans fetch error": "lån hämta fel:"
   },
+  "Log on at MitID": "Logga in på MitID",
+  "User ID": "Användar ID",
+  "Open MitID app and approve": "Öppna MitID-appen och godkänn",
+  "Scan QR code using MitID app": "Skanna QR-kod med MitID-appen",
   "Connect your bank accounts with BankID and find all account information.": "Koppla dina bankkonton med BankID och hitta all kontoinformation.",
   "Same Device": "Samma enhet",
   "Other Device": "Annan enhet",

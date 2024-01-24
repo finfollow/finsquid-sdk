@@ -42,6 +42,7 @@ export type LoginOptions = {
 };
 
 export type LoginMethod =
+  | "mitid"
   | "bankid"
   | "bankidSSN"
   | "usernamePassword"
@@ -71,6 +72,11 @@ export type BankLoginBody = {
       }
     | {
         loginMethod: "bankid";
+        sameDevice?: boolean;
+      }
+    | {
+        loginMethod: "mitid";
+        userId: string;
         sameDevice?: boolean;
       };
 };
