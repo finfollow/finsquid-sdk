@@ -49,6 +49,18 @@ export default function BankIdOption({
         onClick={() => onSubmit(false)}
       >
         {t("Other Device")}
+        <Image
+          preview={false}
+          style={{
+            objectFit: "cover",
+            position: "absolute",
+            width: 30,
+            height: 40,
+            top: -25,
+            left: 20,
+          }}
+          src="/bankID_logo_black.svg"
+        />
       </Button>
     </Space>
   );
