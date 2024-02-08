@@ -32,7 +32,8 @@
   },
   "placeholder": {
     "SSN": "YYYYMMDDXXXX",
-    "accountSelect": "-- Välj --"
+    "accountSelect": "-- Välj --",
+    "Select an adviser": "Välj en rådgivare"
   },
   "table": {
     "name": {

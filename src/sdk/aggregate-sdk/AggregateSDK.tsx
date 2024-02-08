@@ -4,6 +4,7 @@ import {
   Grid,
   Input,
   Modal,
+  Select,
   Space,
   Tooltip,
   Typography,
@@ -457,11 +458,51 @@ export default function AggregateSDK() {
             name="email"
             rules={[{ required: true, type: "email" }]}
           >
-            <Input
-              type="email"
-              placeholder="adviser@email.com"
-              style={{ height: 35 }}
-              onPressEnter={modalForm.submit}
+            <Select
+              showSearch
+              placeholder={t("placeholder.Select an adviser")}
+              optionFilterProp="children"
+              filterOption={(
+                input: string,
+                option?: { label: string; value: string }
+              ) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
+              options={[
+                {
+                  value: "carl@finsquid.io",
+                  label: "Carl Meiton - carl@finsquid.io",
+                },
+                {
+                  value: "christer@finsquid.io",
+                  label: "Christer Wikman - christer@finsquid.io",
+                },
+                {
+                  value: "sharapa.oleg@finsquid.io",
+                  label: "Oleg Sharapa - sharapa.oleg@finsquid.io",
+                },
+                {
+                  value: "mikael.strandberg@strandbergkapital.se",
+                  label:
+                    "Mikael Strandberg - mikael.strandberg@strandbergkapital.se",
+                },
+                {
+                  value: "patrik.rosenberg@strandbergkapital.se",
+                  label:
+                    "Patrik Rosenberg - patrik.rosenberg@strandbergkapital.se",
+                },
+                {
+                  value: "rasmus.dahlberg@strandbergkapital.se",
+                  label:
+                    "Rasmus Dahlberg - rasmus.dahlberg@strandbergkapital.se",
+                },
+                {
+                  value: "oscar.karlsson@strandbergkapital.se",
+                  label: "Oscar Karlsson - oscar.karlsson@strandbergkapital.se",
+                },
+              ]}
             />
           </Form.Item>
         </Form>

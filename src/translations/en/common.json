@@ -32,7 +32,8 @@
   },
   "placeholder": {
     "SSN": "YYYYMMDDXXXX",
-    "accountSelect": "-- Select --"
+    "accountSelect": "-- Select --",
+    "Select an adviser": "Select an adviser"
   },
   "table": {
     "name": {

@@ -14,16 +14,13 @@ export default {
     const url = new URL(request.url);
     if (url.pathname.startsWith("/api/sendOverview")) {
       const { RESEND_KEY, GATEWAY_URL: apiUrl } = env;
-      console.log("env: ", env);
       try {
         const authorization = request.headers.get("Authorization");
-        console.log("authorization: ", authorization);
         const body = await request.json();
-        console.log("body: ", body);
         const sids = body.sids;
 
         const accounts = await getAccounts({ apiUrl, authorization, sids });
-        console.log("accounts: ", accounts);
+        console.log("all accounts: ", accounts);
         const loans = await getLoans({ apiUrl, authorization, sids });
         const accountsWithPositions = await getAccountsWithPositions({
           apiUrl,
@@ -33,7 +30,7 @@ export default {
           ),
         });
 
-        if (!accounts?.length || !loans?.length)
+        if (!accounts?.length && !loans?.length)
           return new Response(
             JSON.stringify(
               "Something went wrong, couldn't get any accounts to send"
@@ -230,64 +227,66 @@ export default {
         });
 
         // Draw header and details for loans section
-        let interest = 0;
-        let totalLoan = 0;
+        if (loans.length) {
+          let interest = 0;
+          let totalLoan = 0;
 
-        const totals = {
-          Total: currencyValue(
-            loans.reduce(
-              (total, loan) => {
-                total.amt += loan.balance.amt || 0;
-                if (!total.cy && loan.balance.cy) total.cy = loan.balance.cy;
-                return total;
-              },
-              { amt: 0, cy: undefined }
+          const totals = {
+            Total: currencyValue(
+              loans.reduce(
+                (total, loan) => {
+                  total.amt += loan.balance.amt || 0;
+                  if (!total.cy && loan.balance.cy) total.cy = loan.balance.cy;
+                  return total;
+                },
+                { amt: 0, cy: undefined }
+              ),
+              { fractionDigits: 0 }
             ),
-            { fractionDigits: 0 }
-          ),
-          "Interest rate": percentValue(getLoansInterestRate(loans)),
-        };
-        positionY += 2;
-        drawSectionTitle("Loans", 10, positionY);
-        positionY += 3;
-        drawSectionHeader(
-          totals,
-          10,
-          positionY,
-          doc.internal.pageSize.width - 20,
-          colorHeaderHeight
-        );
-        positionY += colorHeaderHeight;
-        drawSectionDetails({
-          head: [
-            [
-              "Loan",
-              "Type",
-              {
-                content: "Interest %",
-                styles: { halign: "right" },
-              },
-              {
-                content: "Amount",
-                styles: { halign: "right" },
-              },
+            "Interest rate": percentValue(getLoansInterestRate(loans)),
+          };
+          positionY += 2;
+          drawSectionTitle("Loans", 10, positionY);
+          positionY += 3;
+          drawSectionHeader(
+            totals,
+            10,
+            positionY,
+            doc.internal.pageSize.width - 20,
+            colorHeaderHeight
+          );
+          positionY += colorHeaderHeight;
+          drawSectionDetails({
+            head: [
+              [
+                "Loan",
+                "Type",
+                {
+                  content: "Interest %",
+                  styles: { halign: "right" },
+                },
+                {
+                  content: "Amount",
+                  styles: { halign: "right" },
+                },
+              ],
             ],
-          ],
-          body: loans?.map((loan) => [
-            loan.name,
-            loan.type,
-            {
-              content: percentValue(loan.interestRate),
-              styles: { halign: "right" },
-            },
-            {
-              content: currencyValue(loan.balance),
-              styles: { halign: "right", fontStyle: "bold" },
-            },
-          ]),
-          startY: positionY,
-        });
-        positionY = doc.autoTable.previous.finalY + 5;
+            body: loans?.map((loan) => [
+              loan.name,
+              loan.type,
+              {
+                content: percentValue(loan.interestRate),
+                styles: { halign: "right" },
+              },
+              {
+                content: currencyValue(loan.balance),
+                styles: { halign: "right", fontStyle: "bold" },
+              },
+            ]),
+            startY: positionY,
+          });
+          positionY = doc.autoTable.previous.finalY + 5;
+        }
 
         // Draw account details pages
         accountsWithPositions.forEach((accountDetails) => {
@@ -452,29 +451,6 @@ function arrayBufferToBase64(arrayBuffer) {
   return btoa(binary);
 }
 
-async function getAccountsWithPositions({ apiUrl, authorization, accounts }) {
-  const request = (sid, accountId) =>
-    fetch(`${apiUrl}/v1/accounts/${accountId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authorization,
-        sid,
-      },
-    }).then((res) => res.json());
-
-  const accountsRes = await Promise.allSettled(
-    accounts?.map((account) => request(account.sid, account.providerAccountId))
-  );
-
-  const fulfilledRes = accountsRes.filter((el) => el.status === "fulfilled");
-
-  if (!fulfilledRes.length) return [];
-
-  const result = fulfilledRes.flatMap((el) => el.value);
-
-  return result;
-}
-
 async function getAccounts({ apiUrl, authorization, sids }) {
   const request = async (sid) => {
     const res = await fetch(`${apiUrl}/v1/accounts`, {
@@ -499,6 +475,29 @@ async function getAccounts({ apiUrl, authorization, sids }) {
   const accounts = fulfilledRes.flatMap((el) => el.value);
 
   return accounts;
+}
+
+async function getAccountsWithPositions({ apiUrl, authorization, accounts }) {
+  const request = (sid, accountId) =>
+    fetch(`${apiUrl}/v1/accounts/${accountId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authorization,
+        sid,
+      },
+    }).then((res) => res.json());
+
+  const accountsRes = await Promise.allSettled(
+    accounts?.map((account) => request(account.sid, account.providerAccountId))
+  );
+
+  const fulfilledRes = accountsRes.filter((el) => el.status === "fulfilled");
+  console.log("positions fulfilledRes: ", fulfilledRes);
+  if (!fulfilledRes.length) return [];
+
+  const result = fulfilledRes.flatMap((el) => el.value);
+  console.log("positions result: ", result);
+  return result;
 }
 
 async function getLoans({ apiUrl, authorization, sids }) {
