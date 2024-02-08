@@ -27,7 +27,8 @@
     "Confirm Transfer": "Confirm Transfer",
     "Back to start": "Back to start",
     "Restart": "Restart",
-    "Continue": "Continue"
+    "Continue": "Continue",
+    "Send Report": "Send Report"
   },
   "placeholder": {
     "SSN": "YYYYMMDDXXXX",
@@ -152,5 +153,10 @@
       "YEAR_5": "5Y",
       "ALL": "ALL"
     }
-  }
+  },
+  "Send Overview to Adviser": "Send Overview to Adviser",
+  "Full Name": "Full Name",
+  "Personnummer": "Social Security Number",
+  "Adviser Email": "Adviser Email",
+  "Overview sent to adviser!": "Overview sent to adviser!"
 }

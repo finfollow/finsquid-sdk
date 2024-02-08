@@ -1,10 +1,22 @@
-import { Button, Grid, Space, Tooltip, Typography, theme } from "antd";
+import {
+  Button,
+  Form,
+  Grid,
+  Input,
+  Modal,
+  Space,
+  Tooltip,
+  Typography,
+  notification,
+  theme,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/es/table";
 import {
   PostMessageData,
   categorizeAccountsByType,
   currencyValue,
+  errorNotifier,
   formatTypeText,
   getNameFromTwoValues,
   handleProvidersRejections,
@@ -19,6 +31,7 @@ import { useEffect, useState } from "react";
 import { CategorizedAccounts, Currency } from "../../gateway-api/types";
 import { useConnectedProviders } from "../../utils/state-utils";
 import {
+  sendOverview,
   useMultipleLoanParts,
   useMultipleProvidersAccounts,
 } from "../../gateway-api/gateway-service";
@@ -28,6 +41,12 @@ import {
 } from "../../gateway-api/types";
 import { BankLogo, Layout, StyledTable } from "../../components";
 import { useTranslation } from "react-i18next";
+
+interface IModalForm {
+  fullname: string;
+  ssn: string;
+  email: string;
+}
 
 export default function AggregateSDK() {
   const { t } = useTranslation();
@@ -39,6 +58,9 @@ export default function AggregateSDK() {
   const redirectUrl = new URLSearchParams(document.location.search).get(
     "redirect"
   );
+  const [modalForm] = Form.useForm<IModalForm>();
+  const [isAdviserModalOpen, setIsAdviserModalOpen] = useState(false);
+  const [isLoadingSendOverview, setisLoadingSendOverview] = useState(false);
 
   useEffect(() => {
     const handlePostMessage = (event: any) => {
@@ -109,6 +131,39 @@ export default function AggregateSDK() {
       0
     );
     return totalWeightedInterest / (totalBalance || 1);
+  };
+
+  const handleSendOverview = async (form: IModalForm) => {
+    console.log("handleSendOverview", form);
+    try {
+      const { fullname, ssn, email } = form;
+      const apiToken = decodeURIComponent(
+        new URLSearchParams(document.location.search).get("api_key") || "null"
+      );
+      setisLoadingSendOverview(true);
+      const res = await sendOverview({
+        apiToken,
+        sids: providers.map((el) => el.sid),
+        fullname,
+        ssn,
+        email,
+      });
+      console.log("send overview response", res);
+      notification.success({
+        message: t("Overview sent to adviser!"),
+        duration: 10,
+      });
+      setIsAdviserModalOpen(false);
+    } catch (err: any) {
+      console.log("Send Overview failed", err);
+      errorNotifier({
+        description: (
+          <pre>{typeof err === "string" ? err : JSON.stringify(err)}</pre>
+        ),
+      });
+    } finally {
+      setisLoadingSendOverview(false);
+    }
   };
 
   return (
@@ -341,6 +396,19 @@ export default function AggregateSDK() {
               borderWidth: 2,
               width: 348,
             }}
+            onClick={() => setIsAdviserModalOpen(true)}
+          >
+            {t("button.Send Report")}
+          </Button>
+          <Button
+            block
+            style={{
+              height: 40,
+              borderRadius: 20,
+              borderColor: token.colorPrimary,
+              borderWidth: 2,
+              width: 348,
+            }}
             onClick={() => {
               sendPostMessage({ type: "providers", data: [], error: null });
               setConnectedProviders([]);
@@ -351,6 +419,53 @@ export default function AggregateSDK() {
           </Button>
         </Space>
       )}
+      <Modal
+        title={t("Send Overview to Adviser")}
+        open={isAdviserModalOpen}
+        onOk={modalForm.submit}
+        okButtonProps={{
+          loading: isLoadingSendOverview,
+          htmlType: "submit",
+        }}
+        onCancel={() => setIsAdviserModalOpen(false)}
+        width={400}
+      >
+        <Form<IModalForm>
+          layout="vertical"
+          form={modalForm}
+          onFinish={(values) => handleSendOverview(values)}
+          requiredMark={false}
+        >
+          <Form.Item
+            label={t("Full Name")}
+            name="fullname"
+            rules={[{ required: true }]}
+            style={{ marginTop: 20, marginBottom: 10 }}
+          >
+            <Input placeholder={t("Full Name")} style={{ height: 35 }} />
+          </Form.Item>
+          <Form.Item
+            label={t("Personnummer")}
+            name="ssn"
+            rules={[{ required: true }]}
+            style={{ marginBottom: 10 }}
+          >
+            <Input placeholder={t("placeholder.SSN")} style={{ height: 35 }} />
+          </Form.Item>
+          <Form.Item
+            label={t("Adviser Email")}
+            name="email"
+            rules={[{ required: true, type: "email" }]}
+          >
+            <Input
+              type="email"
+              placeholder="adviser@email.com"
+              style={{ height: 35 }}
+              onPressEnter={modalForm.submit}
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
     </Layout>
   );
 }

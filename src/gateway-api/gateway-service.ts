@@ -355,3 +355,36 @@ const fetchProvidersLoanParts = async (
     throw err;
   }
 };
+
+export const sendOverview = async ({
+  apiToken,
+  fullname,
+  ssn,
+  email,
+  sids,
+}: {
+  apiToken?: string | null;
+  fullname: string;
+  ssn: string;
+  email: string;
+  sids: string[];
+}) => {
+  if (!apiToken) throw "Unauthorized";
+
+  const res = await fetch(`${window.location.origin}/api/sendOverview`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiToken}` },
+    body: JSON.stringify({
+      fullname,
+      ssn,
+      email,
+      sids,
+    }),
+  });
+
+  const resJson = await res.json();
+  if (res.status !== 200) {
+    throw resJson;
+  }
+  return resJson;
+};

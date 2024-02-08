@@ -27,7 +27,8 @@
     "Confirm Transfer": "Bekräfta flytt",
     "Back to start": "Tillbaka till start",
     "Restart": "Starta om",
-    "Continue": "Fortsätta"
+    "Continue": "Fortsätta",
+    "Send Report": "Skicka rapport"
   },
   "placeholder": {
     "SSN": "YYYYMMDDXXXX",
@@ -152,5 +153,10 @@
       "YEAR_5": "5Å",
       "ALL": "ALLT"
     }
-  }
+  },
+  "Send Overview to Adviser": "Skicka översikt till rådgivare",
+  "Full Name": "Fullständiga namn",
+  "Personnummer": "Personnummer",
+  "Adviser Email": "Rådgivares e-post",
+  "Overview sent to adviser!": "Översikt skickas till rådgivare!"
 }
