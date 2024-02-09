@@ -20,7 +20,6 @@ export default {
         const sids = body.sids;
 
         const accounts = await getAccounts({ apiUrl, authorization, sids });
-        console.log("all accounts: ", accounts);
         const loans = await getLoans({ apiUrl, authorization, sids });
         const accountsWithPositions = await getAccountsWithPositions({
           apiUrl,
@@ -290,116 +289,118 @@ export default {
 
         // Draw account details pages
         accountsWithPositions.forEach((accountDetails) => {
-          doc.addPage();
-          positionY = 10;
-          // Calculate totals
-          const totals = {
-            Cash: currencyValue(accountDetails?.account?.balance, {
-              fractionDigits: 0,
-            }),
-            Invested: currencyValue(
-              {
-                amt:
-                  accountDetails?.account?.totalValue?.amt &&
-                  accountDetails?.account?.totalValue?.amt -
-                    (accountDetails?.account?.balance?.amt || 0),
-                cy: accountDetails?.account?.totalValue?.cy,
-              },
-              { fractionDigits: 0 }
-            ),
-            Total: currencyValue(accountDetails?.account?.totalValue, {
-              fractionDigits: 0,
-            }),
-          };
-          positionY += 4;
+          if (accountDetails?.account) {
+            doc.addPage();
+            positionY = 10;
+            // Calculate totals
+            const totals = {
+              Cash: currencyValue(accountDetails?.account?.balance, {
+                fractionDigits: 0,
+              }),
+              Invested: currencyValue(
+                {
+                  amt:
+                    accountDetails?.account?.totalValue?.amt &&
+                    accountDetails?.account?.totalValue?.amt -
+                      (accountDetails?.account?.balance?.amt || 0),
+                  cy: accountDetails?.account?.totalValue?.cy,
+                },
+                { fractionDigits: 0 }
+              ),
+              Total: currencyValue(accountDetails?.account?.totalValue, {
+                fractionDigits: 0,
+              }),
+            };
+            positionY += 4;
 
-          const accountName =
-            accountDetails?.account?.providerAccountNumber ===
-            accountDetails?.account?.name
-              ? accountDetails?.account?.name
-              : `${accountDetails?.account?.name || ""} - ${
-                  accountDetails?.account?.providerAccountNumber || ""
-                }`;
+            const accountName =
+              accountDetails?.account?.providerAccountNumber ===
+              accountDetails?.account?.name
+                ? accountDetails?.account?.name
+                : `${accountDetails?.account?.name || ""} - ${
+                    accountDetails?.account?.providerAccountNumber || ""
+                  }`;
 
-          drawSectionTitle(accountName, 10, positionY);
-          positionY += 3;
-          drawSectionHeader(
-            totals,
-            10,
-            positionY,
-            doc.internal.pageSize.width - 20,
-            colorHeaderHeight
-          );
-          positionY += colorHeaderHeight;
+            drawSectionTitle(accountName, 10, positionY);
+            positionY += 3;
+            drawSectionHeader(
+              totals,
+              10,
+              positionY,
+              doc.internal.pageSize.width - 20,
+              colorHeaderHeight
+            );
+            positionY += colorHeaderHeight;
 
-          const totalAmount = accountDetails?.positions?.reduce(
-            (sum, pos) => sum + (pos.marketValueAC?.amt || 0),
-            0
-          );
-          drawSectionDetails({
-            head: [
-              [
-                "Name",
-                {
-                  content: "Quantity",
-                  styles: { halign: "right" },
-                },
-                {
-                  content: "Latest",
-                  styles: { halign: "right" },
-                },
-                {
-                  content: "Return %",
-                  styles: { halign: "right" },
-                },
-                {
-                  content: "Amount",
-                  styles: { halign: "right" },
-                },
-                {
-                  content: "Share",
-                  styles: { halign: "right" },
-                },
+            const totalAmount = accountDetails?.positions?.reduce(
+              (sum, pos) => sum + (pos.marketValueAC?.amt || 0),
+              0
+            );
+            drawSectionDetails({
+              head: [
+                [
+                  "Name",
+                  {
+                    content: "Quantity",
+                    styles: { halign: "right" },
+                  },
+                  {
+                    content: "Latest",
+                    styles: { halign: "right" },
+                  },
+                  {
+                    content: "Return %",
+                    styles: { halign: "right" },
+                  },
+                  {
+                    content: "Amount",
+                    styles: { halign: "right" },
+                  },
+                  {
+                    content: "Share",
+                    styles: { halign: "right" },
+                  },
+                ],
               ],
-            ],
-            body: accountDetails?.positions?.map((pos) => [
-              pos?.instrument?.name,
-              {
-                content: Math.round(pos?.quantity),
-                styles: { halign: "right" },
-              },
-              {
-                content: currencyValue(pos?.lastPrice, { fractionDigits: 2 }),
-                styles: { halign: "right" },
-              },
-              {
-                content: percentValue(pos?.pctReturn),
-                styles: {
-                  halign: "right",
-                  textColor:
-                    pos?.pctReturn > 0
-                      ? "green"
-                      : pos?.pctReturn < 0
-                      ? "red"
-                      : "black",
+              body: accountDetails?.positions?.map((pos) => [
+                pos?.instrument?.name,
+                {
+                  content: Math.round(pos?.quantity),
+                  styles: { halign: "right" },
                 },
-              },
-              {
-                content: currencyValue(pos?.marketValueAC, {
-                  fractionDigits: 0,
-                }),
-                styles: { halign: "right", fontStyle: "bold" },
-              },
-              {
-                content: percentValue(
-                  (pos?.marketValueAC.amt || 0) / totalAmount
-                ),
-                styles: { halign: "right" },
-              },
-            ]),
-            startY: positionY,
-          });
-          positionY = doc.autoTable.previous.finalY + 5;
+                {
+                  content: currencyValue(pos?.lastPrice, { fractionDigits: 2 }),
+                  styles: { halign: "right" },
+                },
+                {
+                  content: percentValue(pos?.pctReturn),
+                  styles: {
+                    halign: "right",
+                    textColor:
+                      pos?.pctReturn > 0
+                        ? "green"
+                        : pos?.pctReturn < 0
+                        ? "red"
+                        : "black",
+                  },
+                },
+                {
+                  content: currencyValue(pos?.marketValueAC, {
+                    fractionDigits: 0,
+                  }),
+                  styles: { halign: "right", fontStyle: "bold" },
+                },
+                {
+                  content: percentValue(
+                    (pos?.marketValueAC.amt || 0) / totalAmount
+                  ),
+                  styles: { halign: "right" },
+                },
+              ]),
+              startY: positionY,
+            });
+            positionY = doc.autoTable.previous.finalY + 5;
+          }
         });
 
         const pdfBuffer = arrayBufferToBase64(doc.output("arraybuffer"));
@@ -478,6 +479,10 @@ async function getAccounts({ apiUrl, authorization, sids }) {
 }
 
 async function getAccountsWithPositions({ apiUrl, authorization, accounts }) {
+  console.log(
+    "accounts ids: ",
+    accounts?.map((acc) => acc.providerAccountId)
+  );
   const request = (sid, accountId) =>
     fetch(`${apiUrl}/v1/accounts/${accountId}`, {
       headers: {
@@ -487,16 +492,31 @@ async function getAccountsWithPositions({ apiUrl, authorization, accounts }) {
       },
     }).then((res) => res.json());
 
-  const accountsRes = await Promise.allSettled(
-    accounts?.map((account) => request(account.sid, account.providerAccountId))
+  const result = [];
+  for (const account of accounts) {
+    const details = await request(account.sid, account.providerAccountId);
+    result.push(details);
+  }
+
+  console.log(
+    "accounts details result ids: ",
+    result.map((el) => el?.account?.providerAccountId)
   );
 
-  const fulfilledRes = accountsRes.filter((el) => el.status === "fulfilled");
-  console.log("positions fulfilledRes: ", fulfilledRes);
-  if (!fulfilledRes.length) return [];
+  // const accountsRes = await Promise.allSettled(
+  //   accounts?.map((account) => request(account.sid, account.providerAccountId))
+  // );
+  // console.log(
+  //   "accountsRes array: ",
+  //   accountsRes.map((el) => ({
+  //     status: el.status,
+  //     accountId: el?.value?.account?.providerAccountId,
+  //   }))
+  // );
+  // const fulfilledRes = accountsRes.filter((el) => el.status === "fulfilled");
+  // if (!fulfilledRes.length) return [];
 
-  const result = fulfilledRes.flatMap((el) => el.value);
-  console.log("positions result: ", result);
+  // const result = fulfilledRes.flatMap((el) => el.value);
   return result;
 }
 
