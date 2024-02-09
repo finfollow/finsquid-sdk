@@ -1,4 +1,4 @@
-import { Button, QRCode, QRCodeProps, Typography, theme } from "antd";
+import { Button, Image, QRCode, QRCodeProps, Typography, theme } from "antd";
 import { useEffect, useState } from "react";
 import {
   bankIdInitCancel,
@@ -32,7 +32,8 @@ export default function ScanQrCode({
   const { t } = useTranslation();
   const { token } = theme.useToken();
   const [ssn] = useConnectionSSN();
-  const [qrCode, setQrCode] = useState("bankid");
+  const [qrCodeUrl, setQrCodeUrl] = useState("bankid");
+  const [qrCodeImage, setQrCodeImage] = useState("");
   const [qrStatus, setQrStatus] = useState<QRCodeProps["status"]>("loading");
   const [sid, setSid] = useState<string | null>(null);
   const [provider, setProvider] = useLoginProvider();
@@ -62,14 +63,24 @@ export default function ScanQrCode({
           : { loginMethod: "bankid", sameDevice: isSameDevice },
       });
 
-      if (res?.status === "pending" && res?.imageChallengeData && res?.sid) {
+      if (
+        res?.status === "pending" &&
+        (res?.imageChallengeData || res?.qrCodeImage) &&
+        res?.sid
+      ) {
         setProvider({ ...provider, sid: res.sid });
         setSid(res.sid);
-        setQrCode(res.imageChallengeData);
+        res.imageChallengeData && setQrCodeUrl(res.imageChallengeData);
+        res.qrCodeImage && setQrCodeImage(res.qrCodeImage);
         setQrStatus("active");
         if (bankIdStatusPulling.isFetchedAfterMount)
           bankIdStatusPulling.refetch();
-      } else if (!res?.imageChallengeData && res?.sid && isWithSNNConnection) {
+      } else if (
+        !res?.qrCodeImage &&
+        !res?.imageChallengeData &&
+        res?.sid &&
+        isWithSNNConnection
+      ) {
         setProvider({ ...provider, sid: res.sid });
         setNextStep(steps.waitingConnection);
       } else throw "There is no qr code data or session id";
@@ -87,7 +98,8 @@ export default function ScanQrCode({
     queryKey: ["bankIdStatus", sid],
     queryFn: () => pollBankIdStatus(sid as string, false, true),
     refetchInterval: (data) => {
-      if (data?.imageChallengeData) setQrCode(data.imageChallengeData);
+      if (data?.qrCodeImage) setQrCodeImage(data.qrCodeImage);
+      if (data?.imageChallengeData) setQrCodeUrl(data.imageChallengeData);
       if (data?.status === "complete") {
         setProvider({ ...provider, sid });
         onSuccess();
@@ -156,12 +168,17 @@ export default function ScanQrCode({
             borderRadius: 8,
           }}
         >
-          <QRCode
-            value={qrCode}
-            status={qrStatus}
-            style={{ background: token.colorBgContainer }}
-            onRefresh={init}
-          />
+          {!qrCodeImage && (
+            <QRCode
+              value={qrCodeUrl}
+              status={qrStatus}
+              style={{ background: token.colorBgContainer }}
+              onRefresh={init}
+            />
+          )}
+          {qrCodeImage && (
+            <Image width={160} height={160} src={qrCodeImage} preview={false} />
+          )}
         </div>
       </div>
       <Button

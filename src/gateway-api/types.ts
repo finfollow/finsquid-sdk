@@ -87,11 +87,13 @@ export type BankLoginRes =
       sid?: string;
       autostartToken?: string;
       imageChallengeData?: string;
+      qrCodeImage?: string;
     }
   | undefined;
 
 export type BankIdStatus = {
   imageChallengeData?: string;
+  qrCodeImage?: string;
   status: SessionStatus;
   raw?: any;
 };
