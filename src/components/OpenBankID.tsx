@@ -67,36 +67,77 @@ export default function OpenBankId({ onSuccess }: Props) {
     }
   };
 
+  const userAgent = window.navigator.userAgent;
+  const isIosSafari =
+    (!!userAgent.match(/iPhone/i) || !!userAgent.match(/iPad/i)) &&
+    /Safari/.test(userAgent) &&
+    !/CriOS/.test(userAgent) &&
+    !/FxiOS/.test(userAgent) &&
+    !/OPiOS/.test(userAgent) &&
+    !/Oupeng/.test(userAgent) &&
+    !/OPT\//.test(userAgent);
+
   return (
     <CardContentWrapper>
       <CardTitle text="Connect Bank" />
       {!showRetryBtn ? (
-        <Button
-          type={"primary"}
-          loading={isLoading}
-          disabled={!autostartToken}
-          block
-          onClick={() => {
-            window.open(
-              `bankid:///?autostarttoken=${autostartToken}&redirect=null`
-            );
-            onSuccess();
-          }}
-        >
-          {t("Open BankID")}
-          <Image
-            preview={false}
-            style={{
-              position: "absolute",
-              objectFit: "cover",
-              width: 30,
-              height: 40,
-              top: -25,
-              left: 20,
+        isIosSafari ? (
+          <Button
+            type={"primary"}
+            loading={isLoading}
+            disabled={!autostartToken}
+            block
+            onClick={() => {
+              window.open(
+                `https://app.bankid.com/?autostarttoken=${autostartToken}&redirect=null`
+              );
+              onSuccess();
             }}
-            src="/bankID_logo_white.svg"
-          />
-        </Button>
+          >
+            {t("Open BankID")}
+            <Image
+              preview={false}
+              style={{
+                position: "absolute",
+                objectFit: "cover",
+                width: 30,
+                height: 40,
+                top: -25,
+                left: 20,
+              }}
+              src="/bankID_logo_white.svg"
+            />
+          </Button>
+        ) : (
+          <Button
+            type={"primary"}
+            block
+            loading={isLoading}
+            disabled={!autostartToken}
+            href={`bankid:///?autostarttoken=${autostartToken}&redirect=null`}
+            onClick={onSuccess}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textDecoration: "none",
+            }}
+          >
+            {t("Open BankID")}
+            <Image
+              preview={false}
+              style={{
+                position: "absolute",
+                objectFit: "cover",
+                width: 30,
+                height: 40,
+                top: -20,
+                left: 20,
+              }}
+              src="/bankID_logo_white.svg"
+            />
+          </Button>
+        )
       ) : (
         <Button
           loading={isLoading}
