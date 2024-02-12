@@ -492,31 +492,33 @@ async function getAccountsWithPositions({ apiUrl, authorization, accounts }) {
       },
     }).then((res) => res.json());
 
-  const result = [];
-  for (const account of accounts) {
-    const details = await request(account.sid, account.providerAccountId);
-    result.push(details);
-  }
+  // sequence requests
+  // const result = [];
+  // for (const account of accounts) {
+  //   const details = await request(account.sid, account.providerAccountId);
+  //   result.push(details);
+  // }
 
-  console.log(
-    "accounts details result ids: ",
-    result.map((el) => el?.account?.providerAccountId)
-  );
-
-  // const accountsRes = await Promise.allSettled(
-  //   accounts?.map((account) => request(account.sid, account.providerAccountId))
-  // );
   // console.log(
-  //   "accountsRes array: ",
-  //   accountsRes.map((el) => ({
-  //     status: el.status,
-  //     accountId: el?.value?.account?.providerAccountId,
-  //   }))
+  //   "accounts details result ids: ",
+  //   result.map((el) => el?.account?.providerAccountId)
   // );
-  // const fulfilledRes = accountsRes.filter((el) => el.status === "fulfilled");
-  // if (!fulfilledRes.length) return [];
 
-  // const result = fulfilledRes.flatMap((el) => el.value);
+  // parrallel requests
+  const accountsRes = await Promise.allSettled(
+    accounts?.map((account) => request(account.sid, account.providerAccountId))
+  );
+  console.log(
+    "accountsRes array: ",
+    accountsRes.map((el) => ({
+      status: el.status,
+      accountId: el?.value?.account?.providerAccountId,
+    }))
+  );
+  const fulfilledRes = accountsRes.filter((el) => el.status === "fulfilled");
+  if (!fulfilledRes.length) return [];
+
+  const result = fulfilledRes.flatMap((el) => el.value);
   return result;
 }
 
