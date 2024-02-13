@@ -476,8 +476,8 @@ export default function AggregateSDK() {
                   label: "Carl Meiton - carl@finsquid.io",
                 },
                 {
-                  value: "christer@finsquid.io",
-                  label: "Christer Wikman - christer@finsquid.io",
+                  value: "Christer.wikman@gmail.com",
+                  label: "Christer Wikman - Christer.wikman@gmail.com",
                 },
                 {
                   value: "sharapa.oleg@finsquid.io",
