@@ -494,19 +494,6 @@ async function getAccountsWithPositions({ apiUrl, authorization, accounts }) {
       },
     }).then((res) => res.json());
 
-  // sequence requests
-  // const result = [];
-  // for (const account of accounts) {
-  //   const details = await request(account.sid, account.providerAccountId);
-  //   result.push(details);
-  // }
-
-  // console.log(
-  //   "accounts details result ids: ",
-  //   result.map((el) => el?.account?.providerAccountId)
-  // );
-
-  // parrallel requests
   const accountsRes = await Promise.allSettled(
     accounts?.map((account) => request(account.sid, account.providerAccountId))
   );
