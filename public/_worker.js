@@ -73,8 +73,10 @@ export default {
         doc.setFontSize(10);
 
         doc.text(`Full Name: ${body.fullname}`, 10, positionY);
-        positionY += 4;
+        positionY += 5;
         doc.text(`Personnummer: ${body.ssn}`, 10, positionY);
+        positionY += 5;
+        doc.text(`Email: ${body.userEmail}`, 10, positionY);
         positionY += 6;
 
         const colorHeaderHeight = 13;
@@ -408,9 +410,9 @@ export default {
         const resend = new Resend(RESEND_KEY);
         const { data, error } = await resend.emails.send({
           from: "report@resend.finsquid.io",
-          to: [body.email],
+          to: [body.adviserEmail],
           subject: "Financial Overview Report",
-          html: `<p>Hello!</p><p>${body.fullname} - ${body.ssn} report in the attachment.</p>`,
+          html: `<p>Hello!</p><p>${body.fullname} - ${body.ssn} - ${body.userEmail} report in the attachment.</p>`,
           attachments: [
             {
               filename: `${body.ssn}-report.pdf`,

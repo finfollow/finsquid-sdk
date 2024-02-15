@@ -357,27 +357,31 @@ const fetchProvidersLoanParts = async (
 };
 
 export const sendOverview = async ({
-  apiToken,
   fullname,
   ssn,
-  email,
+  userEmail,
+  adviserEmail,
   sids,
 }: {
-  apiToken?: string | null;
   fullname: string;
   ssn: string;
-  email: string;
+  userEmail: string;
+  adviserEmail: string;
   sids: string[];
 }) => {
-  if (!apiToken) throw "Unauthorized";
+  const apiKey = decodeURIComponent(
+    new URLSearchParams(document.location.search).get("api_key") || "null"
+  );
+  if (!apiKey) throw "Unauthorized";
 
   const res = await fetch(`${window.location.origin}/api/sendOverview`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiToken}` },
+    headers: { Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify({
       fullname,
       ssn,
-      email,
+      userEmail,
+      adviserEmail,
       sids,
     }),
   });

@@ -158,6 +158,7 @@
   "Send Overview to Adviser": "Send Overview to Adviser",
   "Full Name": "Full Name",
   "Personnummer": "Social Security Number",
-  "Adviser Email": "Adviser Email",
+  "Email": "Email",
+  "Adviser": "Adviser",
   "Overview sent to adviser!": "Overview sent to adviser!"
 }
