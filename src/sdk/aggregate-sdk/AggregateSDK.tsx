@@ -46,7 +46,8 @@ import { useTranslation } from "react-i18next";
 interface IModalForm {
   fullname: string;
   ssn: string;
-  email: string;
+  userEmail: string;
+  adviserEmail: string;
 }
 
 export default function AggregateSDK() {
@@ -137,17 +138,14 @@ export default function AggregateSDK() {
   const handleSendOverview = async (form: IModalForm) => {
     console.log("handleSendOverview", form);
     try {
-      const { fullname, ssn, email } = form;
-      const apiToken = decodeURIComponent(
-        new URLSearchParams(document.location.search).get("api_key") || "null"
-      );
+      const { fullname, ssn, userEmail, adviserEmail } = form;
       setisLoadingSendOverview(true);
       const res = await sendOverview({
-        apiToken,
         sids: providers.map((el) => el.sid),
         fullname,
         ssn,
-        email,
+        userEmail,
+        adviserEmail,
       });
       console.log("send overview response", res);
       notification.success({
@@ -454,8 +452,20 @@ export default function AggregateSDK() {
             <Input placeholder={t("placeholder.SSN")} style={{ height: 35 }} />
           </Form.Item>
           <Form.Item
-            label={t("Adviser Email")}
-            name="email"
+            label={t("Email")}
+            name="userEmail"
+            rules={[{ required: true, type: "email" }]}
+            style={{ marginBottom: 10 }}
+          >
+            <Input
+              type="email"
+              placeholder="user@email.com"
+              style={{ height: 35 }}
+            />
+          </Form.Item>
+          <Form.Item
+            label={t("Adviser")}
+            name="adviserEmail"
             rules={[{ required: true, type: "email" }]}
           >
             <Select

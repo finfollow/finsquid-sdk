@@ -158,6 +158,7 @@
   "Send Overview to Adviser": "Skicka översikt till rådgivare",
   "Full Name": "Fullständiga namn",
   "Personnummer": "Personnummer",
-  "Adviser Email": "Rådgivares e-post",
+  "Email": "E-post",
+  "Adviser": "Rådgivare",
   "Overview sent to adviser!": "Översikt skickas till rådgivare!"
 }
