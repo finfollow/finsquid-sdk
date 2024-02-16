@@ -498,6 +498,10 @@ export default function AggregateSDK() {
                   label: "Peter Pilestedt - peter@finsquid.io",
                 },
                 {
+                  value: "axel.svensson@strandbergkapital.se",
+                  label: "Axel Svensson - axel.svensson@strandbergkapital.se",
+                },
+                {
                   value: "mikael.strandberg@strandbergkapital.se",
                   label:
                     "Mikael Strandberg - mikael.strandberg@strandbergkapital.se",
