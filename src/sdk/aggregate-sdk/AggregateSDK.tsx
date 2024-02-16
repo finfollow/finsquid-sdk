@@ -482,6 +482,10 @@ export default function AggregateSDK() {
               }
               options={[
                 {
+                  value: "axel.svensson@strandbergkapital.se",
+                  label: "Axel Svensson - axel.svensson@strandbergkapital.se",
+                },
+                {
                   value: "mikael.strandberg@strandbergkapital.se",
                   label:
                     "Mikael Strandberg - mikael.strandberg@strandbergkapital.se",
