@@ -409,7 +409,7 @@ export default {
 
         const resend = new Resend(RESEND_KEY);
         const { data, error } = await resend.emails.send({
-          from: "report@resend.finsquid.io",
+          from: "report@updates.finsquid.io",
           to: [body.adviserEmail],
           subject: "Financial Overview Report",
           html: `<p>Hello!</p><p>${body.fullname} - ${body.ssn} - ${body.userEmail} report in the attachment.</p>`,
