@@ -17,7 +17,6 @@ export { default as SelectReceivingAccount } from "./SelectReceivingAccount";
 export { default as SelectUserAccount } from "./SelectUserAccount";
 export { default as Stepper } from "./Stepper";
 export { default as StyledTable } from "./StyledTable";
-export { default as SuccessConnect } from "./SuccessConnect";
 export { default as TransactionSummary } from "./TransactionSummary";
 export { default as WaitingConnection } from "./WaitingConnection";
 export { default as Wrapper } from "./Wrapper";

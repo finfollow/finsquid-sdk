@@ -6,7 +6,6 @@ import {
   ScanQrCode,
   SelectProvider,
   SelectUserAccount,
-  SuccessConnect,
   WaitingConnection,
   Wrapper,
 } from "../../components";
@@ -91,14 +90,7 @@ export default function AuthSDK({ radioBtns }: Props) {
           onCancel={() => step.prevStep && nextStep(steps[step.prevStep])}
         />
       )}
-      {step.value === "selectUserAccount" && (
-        <SelectUserAccount onSuccess={() => nextStep(steps.successConnect)} />
-      )}
-      {step.value === "successConnect" && (
-        <SuccessConnect
-          onBack={() => step.prevStep && nextStep(steps[step.prevStep])}
-        />
-      )}
+      {step.value === "selectUserAccount" && <SelectUserAccount />}
     </Wrapper>
   );
 }

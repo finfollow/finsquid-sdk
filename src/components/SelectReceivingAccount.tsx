@@ -3,7 +3,7 @@ import { AccountOverview } from "../gateway-api/types";
 import {
   currencyValue,
   getNameFromTwoValues,
-  sendPostMessage,
+  sendResultMessage,
   tablesSort,
   transformAccountSubType,
 } from "../utils/helpers";
@@ -37,7 +37,7 @@ export default function SelectReceivingAccount({ onSubmit }: Props) {
 
   useEffect(() => {
     if (error)
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: {
           type: t("error.Receiving accounts fetch error"),
@@ -55,7 +55,7 @@ export default function SelectReceivingAccount({ onSubmit }: Props) {
           selected={
             acc.providerAccountId === receivingAccount?.providerAccountId
           }
-          disabled={transferingAccount?.type !== acc.type}
+          disabled={transferingAccount?.subType !== acc.subType}
         />
       ),
     },

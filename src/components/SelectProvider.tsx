@@ -5,7 +5,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useLoginProvider } from "../utils/state-utils";
 import { useProviders } from "../gateway-api/gateway-service";
 import { Provider } from "../gateway-api/types";
-import { sendPostMessage, tablesSort } from "../utils/helpers";
+import { sendResultMessage, tablesSort } from "../utils/helpers";
 import { useTranslation } from "react-i18next";
 import CardTitle from "./CardTitle";
 
@@ -37,7 +37,7 @@ export default function SelectProvider({ onSubmit, radioBtns }: Props) {
 
   useEffect(() => {
     if (error)
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: { type: t("error.Providers fetch error"), message: error },
       });

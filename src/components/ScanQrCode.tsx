@@ -12,7 +12,7 @@ import {
   useLoginIsSameDevice,
   useLoginProvider,
 } from "../utils/state-utils";
-import { sendPostMessage } from "../utils/helpers";
+import { sendResultMessage } from "../utils/helpers";
 import { useTranslation } from "react-i18next";
 import CardTitle from "./CardTitle";
 import CardContentWrapper from "./CardContentWrapper";
@@ -86,7 +86,7 @@ export default function ScanQrCode({
       } else throw "There is no qr code data or session id";
     } catch (error) {
       console.error("bank init login error:", error);
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: { type: t("error.Bank init error"), message: error },
       });
@@ -108,7 +108,7 @@ export default function ScanQrCode({
     },
     onError: (error) => {
       setQrStatus("expired");
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: {
           type: t("error.BankID status pulling error"),

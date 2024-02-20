@@ -15,8 +15,9 @@ type Props = {
 
 export default function FinalResult({ onSubmit }: Props) {
   const { t } = useTranslation();
-  const searchParams = new URLSearchParams(document.location.search);
-  const redirectLink = searchParams.get("redirect");
+  const { redirect: redirectLink } = Object.fromEntries(
+    new URLSearchParams(document.location.search)
+  );
   const [_p, setLoginProvider] = useLoginProvider();
   const [_tPr, setTransferingProvider] = useTransferingProvider();
   const [_tA, setTransferingAccount] = useTransferingAccount();

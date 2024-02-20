@@ -16,7 +16,11 @@ import {
   Transaction,
   UserAccount,
 } from "./types";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import {
+  UseQueryOptions,
+  UseQueryResult,
+  useQuery,
+} from "@tanstack/react-query";
 import { dummyReceivingAccounts } from "../utils/constants";
 import { handleProvidersRejections } from "../utils/helpers";
 
@@ -141,7 +145,7 @@ export function useAccount(
         }),
     //@ts-ignore
     options
-  );
+  ) as UseQueryResult<AccountDetails, unknown>;
 }
 
 export function useAccounts(sid?: string | null, includeRawData = false) {
@@ -178,7 +182,7 @@ export function usePerformance(
         }),
     //@ts-ignore
     options
-  );
+  ) as UseQueryResult<PerfTick[], unknown>;
 }
 
 export function useAccountPositions(
@@ -219,7 +223,7 @@ export function useAccountTransactions(
         }),
     //@ts-ignore
     options
-  );
+  ) as UseQueryResult<Transaction[], unknown>;
 }
 
 //dummy receiving request
@@ -231,7 +235,7 @@ export function useReceivingAccounts() {
         setTimeout(() => {
           const data = { accounts: dummyReceivingAccounts };
           resolve(data);
-        }, 1000);
+        }, 300);
       }),
   });
 }

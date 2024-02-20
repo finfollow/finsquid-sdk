@@ -15,7 +15,7 @@ import {
   bankInitLogin,
   pollBankIdStatus,
 } from "../gateway-api/gateway-service";
-import { sendPostMessage } from "../utils/helpers";
+import { sendResultMessage } from "../utils/helpers";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -61,7 +61,7 @@ export default function ConnectViaMitID({ onSuccess, onCancel }: Props) {
       } else throw "There is no qr code data or session id";
     } catch (error) {
       console.error("bank init login error:", error);
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: { type: t("error.Bank init error"), message: error },
       });
@@ -83,7 +83,7 @@ export default function ConnectViaMitID({ onSuccess, onCancel }: Props) {
     },
     onError: (error) => {
       setQrStatus("expired");
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: {
           type: t("error.BankID status pulling error"),

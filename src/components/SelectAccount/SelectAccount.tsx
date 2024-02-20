@@ -6,7 +6,7 @@ import { useAccounts } from "../../gateway-api/gateway-service";
 import {
   currencyValue,
   getNameFromTwoValues,
-  sendPostMessage,
+  sendResultMessage,
   tablesSort,
   transformAccountSubType,
 } from "../../utils/helpers";
@@ -38,7 +38,7 @@ export default function SelectAccount({ onSubmit, radioBtns }: Props) {
 
   useEffect(() => {
     if (error)
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: { type: t("error.Accounts fetch error"), message: error },
       });

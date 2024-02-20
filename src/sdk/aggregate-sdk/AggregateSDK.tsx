@@ -2,14 +2,15 @@ import { Button, Grid, Space, Tooltip, Typography, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ColumnsType } from "antd/es/table";
 import {
-  PostMessageData,
+  ResultMessageData,
   categorizeAccountsByType,
   currencyValue,
   formatTypeText,
   getNameFromTwoValues,
   handleProvidersRejections,
+  openAuthSdk,
   percentValue,
-  sendPostMessage,
+  sendResultMessage,
   tablesSort,
   transformAccountSubType,
   transformLoanType,
@@ -36,16 +37,13 @@ export default function AggregateSDK() {
   const navigate = useNavigate();
   const [providers, setConnectedProviders] = useConnectedProviders();
   const [accounts, setAccounts] = useState<CategorizedAccounts>();
-  const redirectUrl = new URLSearchParams(document.location.search).get(
-    "redirect"
-  );
 
   useEffect(() => {
     const handlePostMessage = (event: any) => {
-      const { type, data }: PostMessageData =
+      const { type, data }: ResultMessageData =
         typeof event.data === "string" ? JSON.parse(event.data) : event.data;
 
-      if (type === "providers") {
+      if (type === "success") {
         setConnectedProviders(data?.length ? data : []);
         console.log("RESULT: ", data);
       }
@@ -138,7 +136,7 @@ export default function AggregateSDK() {
                 height: 40,
                 borderRadius: 20,
               }}
-              onClick={() => navigate(`auth/?redirect=${redirectUrl}`)}
+              onClick={openAuthSdk}
             >
               {t("button.Connect Bank")}
             </Button>
@@ -170,9 +168,9 @@ export default function AggregateSDK() {
                 borderWidth: 2,
               }}
               onClick={() => {
-                sendPostMessage({ type: "providers", data: [], error: null });
+                sendResultMessage({ type: "success", data: [], error: null });
                 setConnectedProviders([]);
-                navigate(`auth/?redirect=${redirectUrl}`);
+                openAuthSdk();
               }}
             >
               {t("button.Restart")}
@@ -328,7 +326,7 @@ export default function AggregateSDK() {
               borderRadius: 20,
               width: 348,
             }}
-            onClick={() => navigate(`auth/?redirect=${redirectUrl}`)}
+            onClick={openAuthSdk}
           >
             {t("button.Add Bank")}
           </Button>
@@ -342,9 +340,9 @@ export default function AggregateSDK() {
               width: 348,
             }}
             onClick={() => {
-              sendPostMessage({ type: "providers", data: [], error: null });
+              sendResultMessage({ type: "success", data: [], error: null });
               setConnectedProviders([]);
-              navigate(`auth/?redirect=${redirectUrl}`);
+              openAuthSdk();
             }}
           >
             {t("button.Restart")}

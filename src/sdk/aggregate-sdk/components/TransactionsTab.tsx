@@ -111,7 +111,7 @@ const columns: (t: any) => ColumnsType<Transaction> = (t) => [
   {
     title: t("table.Position"),
     dataIndex: "position",
-    render: (i, tr) => tr?.instrument?.name ?? "-",
+    render: (_, tr) => tr?.instrument?.name ?? "-",
     sorter: (a, b) => tablesSort(a.instrument?.name, b.instrument?.name),
   },
   {

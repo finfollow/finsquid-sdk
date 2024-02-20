@@ -12,7 +12,7 @@ import svSE from "antd/locale/sv_SE";
 import enUS from "antd/locale/en_US";
 import BankAccountDetails from "./sdk/aggregate-sdk/components/BankAccountDetails";
 import InvestmentAccountDetails from "./sdk/aggregate-sdk/components/InvestmentAccountDetails";
-import AggregateAuth from "./sdk/aggregate-sdk/components/AggregateAuth";
+import AggregateAuthResult from "./sdk/aggregate-sdk/components/AggregateAuthResult";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -69,6 +69,7 @@ function App() {
             />
             <Route path="aggregate">
               <Route index element={<AggregateSDK />} />
+              <Route path="auth-result" element={<AggregateAuthResult />} />
               <Route
                 path="account/:sid/:accountId"
                 element={<BankAccountDetails />}
@@ -76,19 +77,6 @@ function App() {
               <Route
                 path="investmentAccount/:sid/:accountId"
                 element={<InvestmentAccountDetails />}
-              />
-              <Route
-                path="auth"
-                element={
-                  <AggregateAuth
-                    apiToken={apiToken}
-                    apiUrl={
-                      searchParams.get("api_url") ||
-                      import.meta.env.VITE_GATEWAY_URL
-                    }
-                    theme={themeParams && encodeURIComponent(themeParams)}
-                  />
-                }
               />
             </Route>
           </Routes>

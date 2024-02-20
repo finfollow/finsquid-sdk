@@ -162,19 +162,63 @@ export const categorizePositionsByType = (positions?: Position[]) =>
       positions: positions.filter((el) => el.instrument.type === type),
     }));
 
-export type PostMessageData = {
-  type: "providers" | "success" | "error";
+export type ResultMessageData = {
+  type: "success" | "error";
   data?: any;
   error?: { type?: string; message?: any } | null;
 };
 
-export const sendPostMessage = (message: PostMessageData) => {
+export const sendResultMessage = (message: ResultMessageData) => {
+  console.log("sendResultMessage document.location.search", document.location);
   const searchParams = new URLSearchParams(document.location.search);
-  const targetOrigin = searchParams.get("redirect");
+  const isIframe = searchParams.get("iframe") === "true";
+  console.log("sendResultMessage isIframe", isIframe);
+  const baseRedirectLink = searchParams.get("redirect");
+  console.log("sendResultMessage baseRedirectLink", baseRedirectLink);
+  if (isIframe) window.parent.postMessage(message, baseRedirectLink || "*");
+  else if (baseRedirectLink) {
+    const redirectUrl = new URL(baseRedirectLink);
 
-  if (targetOrigin && targetOrigin !== "null") {
-    window.parent.postMessage(message, targetOrigin);
+    redirectUrl.searchParams.set("type", message.type);
+    if (message.type === "error") {
+      redirectUrl.searchParams.set("error", message.error?.type || "");
+      redirectUrl.searchParams.set("message", message.error?.message || "");
+    } else {
+      redirectUrl.searchParams.set(
+        "data",
+        encodeURIComponent(
+          typeof message.data === "object"
+            ? JSON.stringify(message.data)
+            : message.data
+        )
+      );
+    }
+    console.log("sendResultMessage redirectUrl: ", redirectUrl);
+    window.open(redirectUrl, "_self");
   }
+};
+
+export const openAuthSdk = () => {
+  const baseUrl = window.location.origin;
+  const searchParams = new URLSearchParams(window.location.search);
+
+  searchParams.delete("type");
+  searchParams.delete("data");
+  searchParams.delete("error");
+  searchParams.delete("message");
+  searchParams.delete("redirect");
+  const redirectToAuthResult = new URL(
+    `${baseUrl}/aggregate/auth-result/?${searchParams.toString()}`
+  );
+
+  searchParams.delete("iframe");
+  const authSdkLink = new URL(
+    `${baseUrl}/auth/?${searchParams.toString()}&redirect=${encodeURIComponent(
+      redirectToAuthResult.toString()
+    )}`
+  );
+
+  window.open(authSdkLink, "_self");
 };
 
 export const errorNotifier = ({

@@ -10,12 +10,16 @@ import {
   SelectProvider,
   SelectReceivingAccount,
   SelectUserAccount,
-  SuccessConnect,
   TransactionSummary,
   WaitingConnection,
   Wrapper,
 } from "../../../components";
 import { StepT, steps } from "../../../utils/constants";
+import {
+  useLoginProvider,
+  useTransferingProvider,
+} from "../../../utils/state-utils";
+import { ProviderT } from "../../../gateway-api/types";
 
 type Props = {
   radioBtns?: boolean;
@@ -23,6 +27,8 @@ type Props = {
 
 export default function TransferComponent({ radioBtns }: Props) {
   const [step, setStep] = useState<StepT>(steps.selectProvider);
+  const [provider] = useLoginProvider();
+  const [_, setTransferingProvider] = useTransferingProvider();
 
   const nextStep: Dispatch<SetStateAction<StepT>> = (_step) => {
     window.scrollTo(0, 0);
@@ -66,12 +72,11 @@ export default function TransferComponent({ radioBtns }: Props) {
         />
       )}
       {step.value === "selectUserAccount" && (
-        <SelectUserAccount onSuccess={() => nextStep(steps.successConnect)} />
-      )}
-      {step.value === "successConnect" && (
-        <SuccessConnect
-          onSubmit={() => nextStep(steps.selectAccount)}
-          onBack={() => step.prevStep && nextStep(steps[step.prevStep])}
+        <SelectUserAccount
+          onSuccess={() => {
+            setTransferingProvider(provider as ProviderT);
+            nextStep(steps.selectAccount);
+          }}
         />
       )}
       {step.value === "selectAccount" && (

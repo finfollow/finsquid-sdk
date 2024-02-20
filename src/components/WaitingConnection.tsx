@@ -8,7 +8,7 @@ import {
   pollBankIdStatus,
 } from "../gateway-api/gateway-service";
 import { useTranslation } from "react-i18next";
-import { sendPostMessage } from "../utils/helpers";
+import { sendResultMessage } from "../utils/helpers";
 import { useLoginProvider } from "../utils/state-utils";
 import { useState } from "react";
 
@@ -40,7 +40,7 @@ export default function WaitingConnection({
       return data?.status == "pending" ? 1000 : false;
     },
     onError: (error) => {
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: {
           type: t("error.BankID status pulling error"),

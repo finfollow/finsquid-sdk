@@ -4,7 +4,7 @@ import CardTitle from "./CardTitle";
 import { bankInitLogin } from "../gateway-api/gateway-service";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { sendPostMessage } from "../utils/helpers";
+import { sendResultMessage } from "../utils/helpers";
 import {
   useConnectionSSN,
   useIsLoginWithSSN,
@@ -57,7 +57,7 @@ export default function OpenBankId({ onSuccess }: Props) {
       } else throw "There is no start token or session id";
     } catch (error) {
       console.error("bank init login error:", error);
-      sendPostMessage({
+      sendResultMessage({
         type: "error",
         error: { type: t("error.Bank init error"), message: error },
       });
