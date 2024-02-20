@@ -40,13 +40,14 @@ export default function AuthSDK({ radioBtns }: Props) {
             provider?.sid
             ? () =>
                 bankIdInitCancel(provider.sid).then((res) => {
-                  if (res?.status === "complete") {
-                    step.prevStep && nextStep(steps[step.prevStep]);
-                    setProvider((prev) => ({
-                      ...(prev as ProviderConnectT),
-                      sid: null,
-                    }));
-                  }
+                  console.log("bank init cancel response: ", res);
+                  // if (res?.status === "complete") {
+                  step.prevStep && nextStep(steps[step.prevStep]);
+                  setProvider((prev) => ({
+                    ...(prev as ProviderConnectT),
+                    sid: null,
+                  }));
+                  // }
                 })
             : () => step.prevStep && nextStep(steps[step.prevStep])
           : undefined

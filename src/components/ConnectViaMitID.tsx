@@ -108,7 +108,8 @@ export default function ConnectViaMitID({ onSuccess, onCancel }: Props) {
     try {
       setIsLoadingCancel(true);
       const res = await bankIdInitCancel(sid);
-      if (res?.status === "complete") onCancel();
+      console.log("bank init cancel response: ", res);
+      /* if (res?.status === "complete") */ onCancel();
     } catch (err) {
       console.log("bank init cancel error: ", err);
     } finally {
