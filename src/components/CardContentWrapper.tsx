@@ -17,6 +17,7 @@ export default function CardContentWrapper({ children }: Props) {
         justifyContent: "space-between",
         flexGrow: xs ? 1 : 0,
         width: "100%",
+        paddingBottom: 40,
       }}
     >
       {children}
