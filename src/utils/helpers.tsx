@@ -163,7 +163,7 @@ export const categorizePositionsByType = (positions?: Position[]) =>
     }));
 
 export type ResultMessageData = {
-  type: "success" | "error";
+  type: "success" | "providers" | "error";
   data?: any;
   error?: { type?: string; message?: any } | null;
 };
