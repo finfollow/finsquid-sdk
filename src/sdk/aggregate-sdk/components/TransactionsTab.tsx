@@ -11,6 +11,7 @@ import {
   tablesSort,
 } from "../../../utils/helpers";
 import { StyledTable } from "../../../components";
+import moment from "moment";
 
 type Props = {
   sid?: string;
@@ -105,6 +106,7 @@ const columns: (t: any) => ColumnsType<Transaction> = (t) => [
   {
     title: t("table.Date"),
     dataIndex: "businessDate",
+    render: (d) => moment(d).format("YYYY-MM-DD"),
     sorter: (a, b) => tablesSort(a.businessDate, b.businessDate),
     width: 100,
   },
