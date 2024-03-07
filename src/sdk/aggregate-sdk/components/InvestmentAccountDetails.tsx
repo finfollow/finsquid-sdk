@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
-import { PerfTimePeriod, getFullPerformance } from "../../../utils/performance";
+import { getFullPerformance } from "../../../utils/performance";
 import { useConnectedProviders } from "../../../utils/state-utils";
 import {
   useAccount,
@@ -19,15 +19,18 @@ import { Line } from "@ant-design/plots";
 import ChartPeriodTabs from "./ChartPeriodTabs";
 import TabsContent from "./TabsContent";
 import RefreshBtn from "./RefreshBtn";
+import { PercentagePerformance } from "../../../gateway-api/types";
 
-const chartPeriods: Array<keyof typeof PerfTimePeriod> = [
-  // "TODAY",
-  "WEEK",
-  "MONTH",
-  "MONTH_3",
-  "YTD",
-  "YEAR",
-  "ALL",
+const periodsSortOrder: Array<keyof PercentagePerformance> = [
+  "today",
+  "l1Week",
+  "l1Month",
+  "l3Month",
+  "ytd",
+  "l1Year",
+  "l3Year",
+  "l5Year",
+  "max",
 ];
 
 export default function InvestmentAccountDetails() {
@@ -36,8 +39,12 @@ export default function InvestmentAccountDetails() {
   const { sid, accountId } = useParams();
   if (!sid || !accountId) return null;
   const { xs } = Grid.useBreakpoint();
+  const [chartPeriods, setChartPeriods] = useState<
+    Array<keyof PercentagePerformance>
+  >(["l1Week", "l1Month", "l3Month", "ytd", "l1Year", "max"]);
+
   const [chartPeriod, setChartPeriod] =
-    useState<keyof typeof PerfTimePeriod>("ALL");
+    useState<keyof PercentagePerformance>("max");
   const [providers] = useConnectedProviders();
   const account = useAccount(sid, accountId, true);
   // @TODO refactor refresh button, transactions fetch twice here and after user comes to transaction tab because of this hook here
@@ -51,6 +58,27 @@ export default function InvestmentAccountDetails() {
       }),
     [performance.data, chartPeriod]
   );
+
+  useEffect(() => {
+    if (account.data?.pctPerformance) {
+      const periods: Array<keyof PercentagePerformance> = [];
+
+      Object.keys(account.data.pctPerformance).forEach((period) => {
+        if (
+          typeof account.data.pctPerformance[
+            period as keyof PercentagePerformance
+          ] === "number"
+        )
+          periods.push(period as keyof PercentagePerformance);
+      });
+
+      setChartPeriods(
+        periods.sort(
+          (a, b) => periodsSortOrder.indexOf(a) - periodsSortOrder.indexOf(b)
+        )
+      );
+    }
+  }, [account.data]);
 
   useEffect(() => {
     if (account.error)

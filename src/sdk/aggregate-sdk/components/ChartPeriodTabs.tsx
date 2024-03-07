@@ -1,13 +1,12 @@
 import { Typography, theme } from "antd";
 import { useTranslation } from "react-i18next";
-import { PerfTimePeriod, periodToPctPerfMap } from "../../../utils/performance";
 import { PercentagePerformance } from "../../../gateway-api/types";
 import { percentValue } from "../../../utils/helpers";
 
 type Props = {
-  tabs: Array<keyof typeof PerfTimePeriod>;
-  current: keyof typeof PerfTimePeriod;
-  onChange: (tab: keyof typeof PerfTimePeriod) => void;
+  tabs: Array<keyof PercentagePerformance>;
+  current: keyof PercentagePerformance;
+  onChange: (tab: keyof PercentagePerformance) => void;
   isLoading?: boolean;
   pctPerformance?: PercentagePerformance | null;
 };
@@ -75,8 +74,7 @@ export default function ChartPeriodTabs({
                     style={{
                       color: isActive
                         ? token.Button?.primaryColor || "#fff"
-                        : (Number(pctPerformance[periodToPctPerfMap[tab]]) ||
-                            0) < 0
+                        : (Number(pctPerformance[tab]) || 0) < 0
                         ? token.red
                         : token.green,
                       fontSize: 9,
@@ -86,10 +84,9 @@ export default function ChartPeriodTabs({
                       overflow: "hidden",
                     }}
                   >
-                    {percentValue(
-                      Number(pctPerformance[periodToPctPerfMap[tab]]),
-                      { fractionDigits: 1 }
-                    )}
+                    {percentValue(Number(pctPerformance[tab]), {
+                      fractionDigits: 1,
+                    })}
                   </Typography.Text>
                 )}
               </div>

@@ -141,16 +141,16 @@
   "chart": {
     "Performance": "Utveckling:",
     "intervals": {
-      "TODAY": "1D",
-      "WEEK": "1V",
-      "MONTH": "1M",
-      "MONTH_3": "3M",
-      "MONTH_6": "6M",
-      "YTD": "NÅ",
-      "YEAR": "1Å",
-      "YEAR_3": "3Å",
-      "YEAR_5": "5Å",
-      "ALL": "ALLT"
+      "today": "1D",
+      "l1Week": "1V",
+      "l1Month": "1M",
+      "l3Month": "3M",
+      "l6Month": "6M",
+      "ytd": "NÅ",
+      "l1Year": "1Å",
+      "l3Year": "3Å",
+      "l5Year": "5Å",
+      "max": "ALLT"
     }
   }
 }

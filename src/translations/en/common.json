@@ -141,16 +141,16 @@
   "chart": {
     "Performance": "Performance:",
     "intervals": {
-      "TODAY": "1D",
-      "WEEK": "1W",
-      "MONTH": "1M",
-      "MONTH_3": "3M",
-      "MONTH_6": "6M",
-      "YTD": "CY",
-      "YEAR": "1Y",
-      "YEAR_3": "3Y",
-      "YEAR_5": "5Y",
-      "ALL": "ALL"
+      "today": "1D",
+      "l1Week": "1W",
+      "l1Month": "1M",
+      "l3Month": "3M",
+      "l6Month": "6M",
+      "ytd": "CY",
+      "l1Year": "1Y",
+      "l3Year": "3Y",
+      "l5Year": "5Y",
+      "max": "ALL"
     }
   }
 }

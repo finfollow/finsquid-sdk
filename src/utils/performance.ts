@@ -1,7 +1,7 @@
 import moment from "moment";
 import { PercentagePerformance, PerfTick } from "../gateway-api/types";
 
-type TimePeriods = Record<keyof typeof PerfTimePeriod, string>;
+type TimePeriods = Record<keyof typeof periodToPctPerfMap, string>;
 
 export function diffOfCurrentYearDays() {
   const oneDay = 24 * 60 * 60 * 1000; // hoursminutesseconds*milliseconds
@@ -16,30 +16,30 @@ export function diffOfCurrentYearDays() {
 export const getPerformancePeriods = (firstDate?: string): TimePeriods => {
   const currentDate = new Date();
   return {
-    // TODAY: moment(currentDate).format("YYYY-MM-DD"),
-    WEEK: moment(currentDate).subtract(8, "days").format("YYYY-MM-DD"),
-    MONTH: moment(currentDate)
+    today: moment(currentDate).format("YYYY-MM-DD"),
+    l1Week: moment(currentDate).subtract(8, "days").format("YYYY-MM-DD"),
+    l1Month: moment(currentDate)
       .subtract(1, "days")
       .subtract(1, "months")
       .format("YYYY-MM-DD"),
-    MONTH_3: moment(currentDate)
+    l3Month: moment(currentDate)
       .subtract(1, "days")
       .subtract(3, "months")
       .format("YYYY-MM-DD"),
-    YTD: moment().subtract(diffOfCurrentYearDays(), "d").format("YYYY-MM-DD"),
-    YEAR: moment(currentDate)
+    ytd: moment().subtract(diffOfCurrentYearDays(), "d").format("YYYY-MM-DD"),
+    l1Year: moment(currentDate)
       .subtract(1, "days")
       .subtract(1, "years")
       .format("YYYY-MM-DD"),
-    YEAR_3: moment(currentDate)
+    l3Year: moment(currentDate)
       .subtract(1, "days")
       .subtract(3, "years")
       .format("YYYY-MM-DD"),
-    YEAR_5: moment(currentDate)
+    l5Year: moment(currentDate)
       .subtract(1, "days")
       .subtract(5, "years")
       .format("YYYY-MM-DD"),
-    ALL: moment(firstDate).format("YYYY-MM-DD"),
+    max: moment(firstDate).format("YYYY-MM-DD"),
   };
 };
 
@@ -53,78 +53,66 @@ export const isDateInPeriod = (
 
 const delimiter = ".";
 export const periodsLabels = {
-  TODAY: {
+  today: {
     indexes: 5,
     format: `HH:mm DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "HH:mm",
   },
-  WEEK: {
+  l1Week: {
     indexes: 5,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "DD MMM",
   },
-  MONTH: {
+  l1Month: {
     indexes: 4,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "DD MMM",
   },
-  MONTH_3: {
+  l3Month: {
     indexes: 10,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "DD MMM",
   },
-  YTD: {
+  ytd: {
     indexes: 6,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "MMM YY",
   },
-  YEAR: {
+  l1Year: {
     indexes: 12,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "MMM YY",
   },
-  YEAR_3: {
+  l3Year: {
     indexes: 12,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "MMM YY",
   },
-  YEAR_5: {
+  l5Year: {
     indexes: 12,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "MMM YY",
   },
-  ALL: {
+  max: {
     indexes: 100,
     format: `DD${delimiter}MM${delimiter}YYYY`,
     chartFormat: "MMM YY",
   },
 };
 
-export enum PerfTimePeriod {
-  // TODAY = "TODAY",
-  WEEK = "WEEK",
-  MONTH = "MONTH",
-  MONTH_3 = "MONTH_3",
-  YTD = "YTD",
-  YEAR = "YEAR",
-  YEAR_3 = "YEAR_3",
-  YEAR_5 = "YEAR_5",
-  ALL = "ALL",
-}
-
 export const periodToPctPerfMap: Record<
-  keyof typeof PerfTimePeriod,
+  keyof PercentagePerformance,
   keyof PercentagePerformance
 > = {
-  // TODAY: "today",
-  WEEK: "l1Week",
-  MONTH: "l1Month",
-  MONTH_3: "l3Month",
-  YTD: "ytd",
-  YEAR: "l1Year",
-  YEAR_3: "l3Year",
-  YEAR_5: "l5Year",
-  ALL: "max",
+  today: "today",
+  l1Week: "l1Week",
+  l1Month: "l1Month",
+  l3Month: "l3Month",
+  ytd: "ytd",
+  l1Year: "l1Year",
+  l3Year: "l3Year",
+  l5Year: "l5Year",
+  max: "max",
 };
 
 export const getFullPerformance = ({
@@ -133,12 +121,12 @@ export const getFullPerformance = ({
   type,
 }: {
   data?: Array<PerfTick | null>;
-  period: keyof typeof PerfTimePeriod;
+  period: keyof typeof periodToPctPerfMap;
   type: "MONETARY" | "PERCENTAGE";
 }) => {
   const periods = getPerformancePeriods(data[0]?.date);
   let _data = Array.isArray(data)
-    ? period === "ALL"
+    ? period === "max"
       ? data
       : data?.filter(
           (item) => item && isDateInPeriod(item?.date, periods[period])
@@ -147,7 +135,7 @@ export const getFullPerformance = ({
 
   let result: { date: string; value: number }[] = [];
   const tickIndex =
-    period === "ALL"
+    period === "max"
       ? type === "MONETARY"
         ? "accMonetaryPerf"
         : "accPctPerf"
@@ -159,7 +147,7 @@ export const getFullPerformance = ({
     let tick = 0;
     const point = _data[index];
 
-    if (period === "ALL") {
+    if (period === "max") {
       tick =
         ((point && point[tickIndex]) || 0) * (type === "PERCENTAGE" ? 100 : 1);
     } else {
